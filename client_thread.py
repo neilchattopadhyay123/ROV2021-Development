@@ -3,10 +3,10 @@ import struct
 import socket
 from threading import Thread
 from constants import *
+from client_utils import *
 
 class ClientThread:
     def __init__ (self):
-        self.send_data = []
         self.recv_data = []
 
         self.connection = None
@@ -16,7 +16,7 @@ class ClientThread:
         self.data = b''
 
     def recv (self):
-        try: # Receive the image from the camera
+        try:
             while len(self.data) < PAYLOAD_SIZE:
                 self.data += self.connection.recv(PACKET_SIZE)
 
@@ -55,8 +55,10 @@ class ClientThread:
         self.address = address
         
         while self.running:
-            self.recv()
-            self.send()
+            self.recv_data = recv(self.connection)
+            
+            send(self.connection, [self.command])
+            self.command = ''
         
         self.connection.close() # Close the connection if the thread ends
 
