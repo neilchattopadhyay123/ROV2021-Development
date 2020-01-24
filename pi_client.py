@@ -4,20 +4,17 @@ import struct
 import cv2
 from picamera.array import PiRGBArray
 from picamera import PiCamera
+from constants import *
 from threading import Thread
 
-HOST = '192.168.2.1'
-PORT = 6969
-RES = (640, 480)
-
-ENCODE_PARAM = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+RUNNING = True
 
 class VideoStream:
     def __init__(self):
         self.camera = PiCamera()
-        self._rawCapture = PiRGBArray(self.camera, size=RES)
+        self._rawCapture = PiRGBArray(self.camera, size=CAMERA_RES)
 
-        self.camera.resolution = RES
+        self.camera.resolution = CAMERA_RES
         self.camera.framerate = 20
         self.camera.shutter_speed = 1000
         self.camera.brightness = 65
@@ -53,12 +50,10 @@ def main ():
 
     while True:
         try:
-            frame = stream.read()
-            _, frame = cv2.imencode('.jpg', frame, ENCODE_PARAM)
+            _, frame = cv2.imencode('.jpg', stream.read(), ENCODE_PARAM)
             frame_data = pickle.dumps([frame], 0)
 
             s.sendall(struct.pack('>L', len(frame_data)) + frame_data)
-            print('sending...')
         except Exception as e:
             print(e)
 

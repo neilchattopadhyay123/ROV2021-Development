@@ -6,9 +6,6 @@ from threading import Thread
 from constants import *
 from client_thread import ClientThread
 
-HOST = ''
-PORT = 6969
-
 SERVER_SOCKET = None
 PI_CLIENT = None
 PI_CLIENT_CONNECTED = False
@@ -46,7 +43,8 @@ def connection_listener ():
     SERVER_SOCKET.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     
     try:
-        SERVER_SOCKET.bind((HOST, PORT))
+        SERVER_SOCKET.bind(('', PORT))
+        
         PRINT('Socket bound to port ' + ENC_VALUE(PORT) + '.', SUCCESS)
     except socket.error as err:
         PRINT('Socket failed to bind to port ' + ENC_VALUE(PORT) + '.', ERROR)

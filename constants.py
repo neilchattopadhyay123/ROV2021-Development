@@ -17,9 +17,17 @@ UI_VALIGN_BOTTOM = 2
 
 FPS = 60
 
+# ------------------------------------------------------
+
+HOST = '192.168.2.1'
+PORT = 6969
+
+CAMERA_RES = (640, 480)
+
 TIMEOUT = 5 # seconds
 PAYLOAD_SIZE = struct.calcsize(">L")
 PACKET_SIZE = 2048
+ENCODE_PARAM = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
 
 DEBUG = 'DEBUG'
 ERROR = 'ERROR'
