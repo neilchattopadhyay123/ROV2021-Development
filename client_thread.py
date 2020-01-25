@@ -8,6 +8,7 @@ from client_utils import *
 class ClientThread:
     def __init__ (self):
         self.recv_data = []
+        self.command = ''
 
         self.connection = None
         self.address = []
