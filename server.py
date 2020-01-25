@@ -74,7 +74,7 @@ def main ():
     while RUNNING:
         if PI_CLIENT_CONNECTED:
             try:
-                frame = cv2.imdecode(PI_CLIENT.recv_data[0], cv2.IMREAD_COLOR)
+                frame = cv2.imdecode(PI_CLIENT.recv_data[DATA_IDX_VIDEO], cv2.IMREAD_COLOR)
 
                 cv2.imshow('frame', frame)
 

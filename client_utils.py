@@ -27,7 +27,7 @@ def recv (connection):
 
     return []
             
-def send (connection, semd_data):
+def send (connection, send_data):
     try:
         data = pickle.dumps(send_data, 0)
 
