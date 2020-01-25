@@ -7,63 +7,41 @@ from client_utils import *
 
 class ClientThread:
     def __init__ (self):
-        self.recv_data = []
-        self.command = ''
+        ''' Constructor '''
+        
+        self.recv_data = [] # The data recieved
+        self.command = '' # The command that is going to be sent to the client
 
-        self.connection = None
-        self.address = []
+        self.connection = None # The connection object
+        self.address = [] # The address of the connected client
 
-        self.running = True
-        self.data = b''
+        self.running = True # Whether the thread is running or not
 
-    def recv (self):
-        try:
-            while len(self.data) < PAYLOAD_SIZE:
-                self.data += self.connection.recv(PACKET_SIZE)
-
-            packed_img_size = self.data[:PAYLOAD_SIZE]
-            self.data = self.data[PAYLOAD_SIZE:]
-            img_size = struct.unpack('>L', packed_img_size)[0]
-
-            while len(self.data) < img_size:
-                self.data += self.connection.recv(PACKET_SIZE)
-
-            loaded_data = self.data[:img_size]
-            self.data = self.data[img_size:]
-
-            self.recv_data = pickle.loads(loaded_data, fix_imports=True, encoding='bytes')
-        except Exception as e:
-            PRINT('Could not receive data.', ERROR)
-            PRINT('| ' + str(e), ERROR)
-            
-            self.running = False
-            
-    def send (self):
-        try:
-            self.send_data = pickle.dumps([self.command], 0)
-
-            self.connection.sendall(struct.pack('>L', len(self.send_data)) + self.send_data)
-
-            self.command = ''
-        except Exception as e:
-            PRINT('Could not send data.', ERROR)
-            PRINT('| ' + str(e), ERROR)
-
-            self.running = False
-            
     def run (self, connection, address):
+        ''' Main client loop '''
+        
         self.connection = connection
         self.address = address
         
         while self.running:
+            # Recieve data
             self.recv_data = recv(self.connection)
-            
+
+            # Send data
             send(self.connection, [self.command])
+
+            # Check if the client is to be disconnected
+            if self.command == COMMAND_QUIT:
+                self.running = false
+
+            # Reset the command so it doesn't send the same thing multiple times
             self.command = ''
         
         self.connection.close() # Close the connection if the thread ends
 
     def push_command (self, command):
+        ''' Send a command to the client '''
+        
         self.command = command
         
         PRINT('Sending command ' + ENC_VALUE(command) + ' to ' + ENC_VALUE(address[0]) + '...')
