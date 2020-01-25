@@ -20,9 +20,14 @@ def main ():
     stream = VideoStream().start()
 
     while RUNNING:
-        _, frame = cv2.imencode('.jpg', stream.read(), ENCODE_PARAM)
+        frame = None
         
-        send(s, [frame])]
+        try:
+            _, frame = cv2.imencode('.jpg', stream.read(), ENCODE_PARAM)
+        except:
+            pass
+        
+        send(s, [frame])
 
         recv_data = recv(s)
 
