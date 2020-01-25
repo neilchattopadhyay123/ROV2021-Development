@@ -1,4 +1,5 @@
 import struct
+import cv2
 
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 500
