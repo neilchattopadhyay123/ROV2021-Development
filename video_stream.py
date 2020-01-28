@@ -25,6 +25,8 @@ class VideoStream:
         ''' Begin reading the camera frames '''
         
         self.thread.start()
+
+        PRINT('Started video stream.', SUCCESS)
         
         return self
 
@@ -48,3 +50,5 @@ class VideoStream:
         
         self.thread.join()
         self.camera.close()
+
+        PRINT('Closed video stream.', SUCCESS)

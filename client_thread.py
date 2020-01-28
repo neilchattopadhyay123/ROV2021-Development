@@ -22,6 +22,8 @@ class ClientThread:
         
         self.connection = connection
         self.address = address
+
+        PRINT('Started client thread for ' + ENC_VALUE(self.address[0]) + '.', SUCCESS)
         
         while self.running:
             # Recieve data
@@ -39,9 +41,11 @@ class ClientThread:
         
         self.connection.close() # Close the connection if the thread ends
 
+        PRINT('Stopped client thread for ' + ENC_VALUE(self.address[0]) + '.', SUCCESS)
+
     def push_command (self, command):
         ''' Send a command to the client '''
         
         self.command = command
         
-        PRINT('Sending command ' + ENC_VALUE(command) + ' to ' + ENC_VALUE(address[0]) + '...')
+        PRINT('Sending command ' + ENC_VALUE(self.command) + ' to ' + ENC_VALUE(address[0]) + '...', INFO)

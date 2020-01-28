@@ -1,25 +1,6 @@
 import struct
 import cv2
 
-SCREEN_WIDTH = 500
-SCREEN_HEIGHT = 500
-
-UI_COLOR = (240, 240, 240)
-UI_PADDING = 10
-UI_SPEED = 10
-
-UI_DIMEN_FILL = -1
-UI_HALIGN_LEFT = 0
-UI_HALIGN_CENTER = 1
-UI_HALIGN_RIGHT = 2
-UI_VALIGN_TOP = 0
-UI_VALIGN_CENTER = 1
-UI_VALIGN_BOTTOM = 2
-
-FPS = 60
-
-# ------------------------------------------------------
-
 # Socket info
 HOST = '192.168.2.1' # The server ip
 PORT = 6969 # The port to connect over
@@ -70,4 +51,5 @@ def ENC_VALUE (value):
 
 def PRINT (string, print_type=INFO):
     ''' Print something in a cool and helpful way '''
+    
     print(ENC_VALUE(print_type) + '> ' + str(string))
