@@ -29,7 +29,10 @@ SUCCESS = 'SUCCESS'
 QUOTES = [
     '"Hear me out..."',
     '"Death! Death! DEATH!!"',
-    '"Hello there!"'
+    '"Hello there!"',
+    '"Gooey'",
+    '"gENeraL KENoBoiauwdhaiwudn"',
+    '"I search \'muscle beds\' and all I received were a bunch of shirtless men lying down."'
 ]
 
 
