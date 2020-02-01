@@ -12,7 +12,7 @@ cv2.namedWindow("test")
 
 img_counter = 0
 
-while img_counter < 5:
+while img_counter < 5: #enables camera, and takes picture every four seconds until five are taken
     
         ret, frame = cam.read()
         cv2.imshow("test", frame)
@@ -24,19 +24,9 @@ while img_counter < 5:
         print("{} written!".format(img_name))
         img_counter += 1
         
-        ti.sleep(4)
-
-
-
+        ti.sleep(2)
 cam.release()
-
 cv2.destroyAllWindows()
-
-
-
-    
-    
-
 
 img1 = (Image.open(r"C:\Users\emrer\.spyder-py3\opencv_frame_0.png")).resize((1024,512))
 img2 = (Image.open(r"C:\Users\emrer\.spyder-py3\opencv_frame_1.png")).resize((1024,512))
@@ -44,9 +34,13 @@ img3 = (Image.open(r"C:\Users\emrer\.spyder-py3\opencv_frame_2.png")).resize((10
 img4 = (Image.open(r"C:\Users\emrer\.spyder-py3\opencv_frame_3.png")).resize((1024,512))
 img5 = (Image.open(r"C:\Users\emrer\.spyder-py3\opencv_frame_4.png")).resize((1024,512))
 
+cpd1 = img1.crop((0,65,1024,450))
+cpd2 = img2.crop((0,65,1024,450))
+cpd3 = img3.crop((0,65,1024,450))
+cpd4 = img4.crop((0,65,1024,450))
+cpd5 = img5.crop((0,65,1024,450))
 
-
-images = [img1, img2, img3, img4, img5] #sets images values to array
+images = [cpd1, cpd2, cpd3, cpd4, cpd5] #sets images values to array
 
 def stitch(files):
     
@@ -62,12 +56,12 @@ def stitch(files):
     
     result = Image.new('RGB', (result_width,result_height))
     result.paste(im=files[0], box=(0,0))
-    result.paste(im=files[1], box=(0,512))
-    result.paste(im=files[2], box=(0,1024))
-    result.paste(im=files[3], box=(0,1536))
-    result.paste(im=files[4], box=(0,2048))
+    result.paste(im=files[1], box=(0,385))
+    result.paste(im=files[2], box=(0,770))
+    result.paste(im=files[3], box=(0,1155))
+    result.paste(im=files[4], box=(0,1540))
     return result
-
+plt.figure(figsize=(20,10))
+plt.axis('off')
 plt.imshow(np.asarray(stitch(images))) #plots images into graph (not visible to humans)
 plt.show() #makes a real graph
-print("What can I say except your welcome!")
