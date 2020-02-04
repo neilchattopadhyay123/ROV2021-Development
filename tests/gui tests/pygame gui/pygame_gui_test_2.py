@@ -1,5 +1,5 @@
 import pygame
-import pygame_gui
+import pygame_gui   
 import os
 from ui_utils import *
 from menu_bar import *
@@ -35,10 +35,12 @@ while is_running:
     
     screen.fill(UI_COLOR_4)
 
-    menubar.draw()
     ui_manager.draw_ui(screen)
 
+
+    time_delta = clock.tick(60) / 1000.0
     pygame.display.update()
-    ui_manager.update(clock.tick(60) / 1000.0)
+    menubar.update(time_delta)
+    ui_manager.update(time_delta)
 
 pygame.quit()
