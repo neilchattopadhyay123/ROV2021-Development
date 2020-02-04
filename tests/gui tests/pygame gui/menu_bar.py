@@ -11,30 +11,24 @@ class MenuBar:
         y = UI_PADDING
         w = MENUBAR_WIDTH
         h = MENUBAR_HEIGHT
-
         self.rect = pygame.Rect(x, y, w, h)
-        self.bar = pygame_gui.elements.UITextBox('', self.rect, self.ui_manager)
         
         self.apps = []
 
-    def update (self, time_delta):
-        for app in self.apps:
-            app.update(time_delta)
-
+    def draw (self):
+        draw_rect(self.screen, self.rect, UI_BORDER)
+        
     def add_app (self, app):
         self.apps.append(app)
 
 class App:
-    def __init__ (self, menubar, icon_path, name):
-        self.menubar = menubar
+    def __init__ (self, name, icon_path, menubar):
         self.name = name
+        self.menubar = menubar
 
         x = self.menubar.rect[0] + UI_PADDING + ((APP_DIMENSION + UI_PADDING) * len(self.menubar.apps))
         y = self.menubar.rect[1] + UI_PADDING
         self.rect = pygame.Rect(x, y, APP_DIMENSION, APP_DIMENSION)
         self.icon = pygame.transform.scale(pygame.image.load(icon_path), (self.rect[2], self.rect[3]))
 
-        self.button = pygame_gui.elements.UIButton(self.rect, '', self.menubar.ui_manager, tool_tip_text=self.name)
-
-    def update (self, time_delta):
-        self.button.update(time_delta)
+        self.button = pygame_gui.elements.UIButton(self.rect, '', manager=self.menubar.ui_manager, tool_tip_text=self.name)
