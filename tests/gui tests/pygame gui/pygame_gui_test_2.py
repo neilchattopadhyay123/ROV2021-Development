@@ -1,20 +1,27 @@
 import pygame
 import pygame_gui
+import os
 from ui_utils import *
 from menu_bar import *
 
 # https://colorhunt.co/palette/114174
 
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+
 pygame.init()
 
+display_info = pygame.display.Info()
+screen_width = display_info.current_w - SCREEN_W_ADJ
+screen_height = display_info.current_h - SCREEN_H_ADJ
+screen = pygame.display.set_mode((screen_width, screen_height))
+
 pygame.display.set_caption('LoggerheadROV Driver Station')
-screen = pygame.display.set_mode(DEFAULT_DIMENSION, flags=pygame.RESIZABLE)
 
-manager = pygame_gui.UIManager(DEFAULT_DIMENSION, 'loggerhead-theme.json')
+ui_manager = pygame_gui.UIManager(screen.get_size(), 'loggerhead-theme.json')
 
-menubar = MenuBar(screen)
-menubar.add_app(App(menubar, pygame.image.load('icon_poweron.png')))
-menubar.add_app(App(menubar, pygame.image.load('icon_poweroff.png')))
+menubar = MenuBar(screen, ui_manager)
+menubar.add_app(App(menubar, 'icon_poweron.png', "Power On"))
+menubar.add_app(App(menubar, 'icon_poweroff.png', "Power Off"))
 
 clock = pygame.time.Clock()
 is_running = True
@@ -24,20 +31,14 @@ while is_running:
         if event.type == pygame.QUIT:
             is_running = False
             
-        elif event.type == pygame.VIDEORESIZE:
-            screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-            manager = pygame_gui.UIManager((event.w, event.h), 'loggerhead-theme.json')
-
-            menubar.calc_rect()
-            
-        manager.process_events(event)
-        
+        ui_manager.process_events(event)
+    
     screen.fill(UI_COLOR_4)
 
     menubar.draw()
-    manager.draw_ui(screen)
+    ui_manager.draw_ui(screen)
 
     pygame.display.update()
-    manager.update(clock.tick(60) / 1000.0)
+    ui_manager.update(clock.tick(60) / 1000.0)
 
 pygame.quit()
