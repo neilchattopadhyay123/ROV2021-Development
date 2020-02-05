@@ -20,8 +20,8 @@ pygame.display.set_caption('LoggerheadROV Driver Station')
 ui_manager = pygame_gui.UIManager(screen.get_size(), UI_MAIN_THEME_PATH)
 
 menubar = MenuBar(screen, ui_manager)
-menubar.add_app(App("Power On", 'icon_poweron.png', menubar))
-menubar.add_app(App("Power Off", 'icon_poweroff.png', menubar))
+menubar.add_app(App("Power On", menubar, 'icon_poweron.png'))
+menubar.add_app(App("Power Off", menubar, 'icon_poweroff.png'))
 
 clock = pygame.time.Clock()
 is_running = True
@@ -32,13 +32,15 @@ while is_running:
             is_running = False
             
         ui_manager.process_events(event)
-    
-    ui_manager.update(clock.tick(60) / 1000.0)
+
+    time_delta = clock.tick(60) / 1000.0
+    ui_manager.update(time_delta)
     
     screen.fill(UI_COLOR_4)
 
     menubar.draw()
     ui_manager.draw_ui(screen)
+    menubar.draw_apps()
 
     pygame.display.update()
 

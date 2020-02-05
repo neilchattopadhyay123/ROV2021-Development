@@ -23,7 +23,6 @@
       "name": "unispace",
       "size": "12",
       "bold": "1",
-      "italic": "0",
 
       "regular_path": "unispace/unispace.ttf",
       "bold_path": "unispace/unispace-bold.ttf",
@@ -46,6 +45,12 @@
       "dark_bg": "#404b69",
       "normal_border": "#283149"
     },
+    "font": {
+      "name": "unispace",
+      "size": "12",
+
+      "regular_path": "unispace/unispace.ttf"
+    },
     "misc": {
       "border_width": "5",
       "padding": "5, 5"
@@ -55,6 +60,12 @@
     "colours": {
       "dark_bg": "#404b69",
       "normal_border": "#283149"
+    },
+    "font": {
+      "name": "unispace",
+      "size": "12",
+
+      "regular_path": "unispace/unispace.ttf"
     },
     "misc": {
       "border_width": "5",

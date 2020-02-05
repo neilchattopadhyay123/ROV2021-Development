@@ -8,7 +8,8 @@ UI_COLOR_1 = pygame.Color('#283149')
 UI_COLOR_2 = pygame.Color('#404b69')
 UI_COLOR_3 = pygame.Color('#f73859')
 UI_COLOR_4 = pygame.Color('#dbedf3')
-UI_PADDING = 10
+UI_PADDING = 5
+UI_SCREEN_PADDING = UI_PADDING * 2
 UI_BORDER = 5
 
 MENUBAR_APP_COUNT = 7
