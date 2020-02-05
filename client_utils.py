@@ -4,9 +4,12 @@ import pickle
 import struct
 
 def recv (connection):
-    data = b''
+    ''' Recieve data method '''
+    
+    data = b'' # The incoming data from the client
     
     try:
+        # Load the incoming data and decode it into a python array
         while len(data) < PAYLOAD_SIZE:
             data += connection.recv(PACKET_SIZE)
 
@@ -27,10 +30,14 @@ def recv (connection):
 
     return []
             
-def send (connection, semd_data):
+def send (connection, send_data):
+    ''' Send data method '''
+    
     try:
+        # Pack the data so its smaller
         data = pickle.dumps(send_data, 0)
 
+        # Send the data to the client
         connection.sendall(struct.pack('>L', len(data)) + data)
     except Exception as e:
         PRINT('Could not send data.', ERROR)
