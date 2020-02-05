@@ -30,11 +30,14 @@ while is_running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_running = False
+
+        if event.type == pygame.KEYDOWN:
+            if pygame.key.get_pressed()[KEYBIND_DISABLE_MENUBAR[1]]:
+                menubar.toggle_hidden()
             
         ui_manager.process_events(event)
 
-    time_delta = clock.tick(60) / 1000.0
-    ui_manager.update(time_delta)
+    ui_manager.update(clock.tick(60) / 1000.0)
     
     screen.fill(UI_COLOR_4)
 

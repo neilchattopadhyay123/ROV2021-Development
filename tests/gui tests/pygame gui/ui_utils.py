@@ -14,8 +14,10 @@ UI_BORDER = 5
 
 MENUBAR_APP_COUNT = 7
 MENUBAR_HEIGHT = 70
-APP_DIMENSION = MENUBAR_HEIGHT - (UI_PADDING * 2)
-MENUBAR_WIDTH = UI_PADDING + (APP_DIMENSION + UI_PADDING) * MENUBAR_APP_COUNT 
+MENUBAR_APP_DIMENSION = MENUBAR_HEIGHT - (UI_PADDING * 2)
+MENUBAR_WIDTH = UI_PADDING + (MENUBAR_APP_DIMENSION + UI_PADDING) * MENUBAR_APP_COUNT
+
+KEYBIND_DISABLE_MENUBAR = ('0', pygame.K_0)
 
 def draw_rect(screen, rect, border, fill_color=UI_COLOR_2, border_color=UI_COLOR_1):
     border_rect = pygame.Rect((rect[0] - border, rect[1] - border), (rect[2] + (border * 2), rect[3] + (border * 2)))
@@ -24,7 +26,7 @@ def draw_rect(screen, rect, border, fill_color=UI_COLOR_2, border_color=UI_COLOR
     pygame.draw.rect(screen, fill_color, rect)
 
 def in_bounds (rect):
-    mouse_pos = pygame.mouse.set_pos()
+    mouse_pos = pygame.mouse.get_pos()
 
     inside_x = mouse_pos[0] > rect[0] and mouse_pos[0] < rect[0] + rect[2]
     inside_y = mouse_pos[1] > rect[1] and mouse_pos[1] < rect[1] + rect[3]
