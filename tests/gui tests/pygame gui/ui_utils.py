@@ -1,7 +1,8 @@
 import pygame
 
-SCREEN_H_ADJ = 250
-SCREEN_W_ADJ = 400
+SCREEN_H_ADJ = 215
+SCREEN_W_ADJ = 215
+SCREEN_DIMENSION = (960, 540)
 
 UI_MAIN_THEME_PATH = 'loggerhead-theme.json'
 UI_COLOR_1 = pygame.Color('#283149')
@@ -32,3 +33,23 @@ def in_bounds (rect):
     inside_y = mouse_pos[1] > rect[1] and mouse_pos[1] < rect[1] + rect[3]
 
     return inside_x and inside_y
+
+def draw_text (screen, font, text, pos, center, color=UI_COLOR_1):
+    text_surface = font.render(text, False, color)
+
+    if center:
+        center_pos = (pos[0] - (text_surface.get_size()[0] / 2), pos[1] - (text_surface.get_size()[1] / 2))
+        screen.blit(text_surface, center_pos)
+    else:
+        screen.blit(text_surface, pos)
+
+def LIMIT (value, lower, upper):
+    ''' Limit a value to an upper and lower bound '''
+    
+    if value < lower:
+        value = lower
+    
+    if value > upper:
+        value = upper
+
+    return value
