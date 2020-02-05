@@ -30,9 +30,10 @@ QUOTES = [
     '"Hear me out..."',
     '"Death! Death! DEATH!!"',
     '"Hello there!"',
-    '"Gooey'",
+    '"Gooey"',
     '"gENeraL KENoBoiauwdhaiwudn"',
-    '"I search \'muscle beds\' and all I received were a bunch of shirtless men lying down."'
+    '"I search \'muscle beds\' and all I received were a bunch of shirtless men lying down."',
+    '"You\'re coating me with your goop!"'
 ]
 
 
