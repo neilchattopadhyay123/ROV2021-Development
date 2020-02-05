@@ -1,7 +1,5 @@
 import pygame
 
-SCREEN_H_ADJ = 215
-SCREEN_W_ADJ = 215
 SCREEN_DIMENSION = (960, 540)
 
 UI_MAIN_THEME_PATH = 'loggerhead-theme.json'
@@ -13,12 +11,17 @@ UI_PADDING = 5
 UI_SCREEN_PADDING = UI_PADDING * 2
 UI_BORDER = 5
 
-MENUBAR_APP_COUNT = 7
+MENUBAR_APP_COUNT = 10
 MENUBAR_HEIGHT = 70
-MENUBAR_APP_DIMENSION = MENUBAR_HEIGHT - (UI_PADDING * 2)
-MENUBAR_WIDTH = UI_PADDING + (MENUBAR_APP_DIMENSION + UI_PADDING) * MENUBAR_APP_COUNT
 
-KEYBIND_DISABLE_MENUBAR = ('0', pygame.K_0)
+APP_DIMENSION = MENUBAR_HEIGHT - (UI_PADDING * 2)
+APP_SELECTED_DIMENSION = APP_DIMENSION + UI_PADDING
+
+FOLDER_MENUBAR_OFFSET = MENUBAR_HEIGHT + (UI_SCREEN_PADDING * 2)
+FOLDER_ICON_PATH = 'icon_folder.png'
+
+KEYBIND_MENUBAR_DISABLE = ('P', pygame.K_p)
+KEYBIND_MENUBAR_SHORTCUTS = [('1', pygame.K_1), ('2', pygame.K_2), ('3', pygame.K_3), ('4', pygame.K_4), ('5', pygame.K_5), ('6', pygame.K_6), ('7', pygame.K_7), ('8', pygame.K_8), ('9', pygame.K_9), ('0', pygame.K_0)]
 
 def draw_rect(screen, rect, border, fill_color=UI_COLOR_2, border_color=UI_COLOR_1):
     border_rect = pygame.Rect((rect[0] - border, rect[1] - border), (rect[2] + (border * 2), rect[3] + (border * 2)))
