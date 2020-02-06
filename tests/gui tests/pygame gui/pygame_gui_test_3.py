@@ -19,12 +19,12 @@ menubar = MenuBar(screen, unispace_font)
 menubar.add_app(App("Power On", menubar, 'icon_poweron.png'))
 menubar.add_app(App("Power Off", menubar, 'icon_poweroff.png'))
 
-server_folder = Folder("Server Functions", menubar, 1)
-server_folder.add_app(App("Power Off", server_folder.menubar, 'icon_poweroff.png'))
+server_folder = App("Server Functions", menubar, is_folder=True)
+server_folder.add_app(App("Power Off", server_folder.sub_app_menubar, 'icon_poweroff.png'))
 menubar.add_app(server_folder)
 
-sub_server_folder = Folder("ANOTHER FOLDER???", server_folder.menubar, 2)
-sub_server_folder.add_app(App("Power On", sub_server_folder.menubar, 'icon_poweron.png'))
+sub_server_folder = App("ANOTHER FOLDER???", server_folder.sub_app_menubar, is_folder=True)
+sub_server_folder.add_app(App("Power On", sub_server_folder.sub_app_menubar, 'icon_poweron.png'))
 server_folder.add_app(sub_server_folder)
 
 is_running = True
