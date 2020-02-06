@@ -18,11 +18,20 @@ clock = pygame.time.Clock()
 menubar = MenuBar(screen, unispace_font)
 menubar.add_app(App("Power On", menubar, 'icon_poweron.png'))
 menubar.add_app(App("Power Off", menubar, 'icon_poweroff.png'))
-menubar.add_app(Folder("Server Functions", menubar))
+
+server_folder = Folder("Server Functions", menubar, 1)
+server_folder.add_app(App("Power Off", server_folder.menubar, 'icon_poweroff.png'))
+menubar.add_app(server_folder)
+
+sub_server_folder = Folder("ANOTHER FOLDER???", server_folder.menubar, 2)
+sub_server_folder.add_app(App("Power On", sub_server_folder.menubar, 'icon_poweron.png'))
+server_folder.add_app(sub_server_folder)
 
 is_running = True
 
 while is_running:
+    mouse_data = (False, False, False)
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_running = False
@@ -35,6 +44,11 @@ while is_running:
         if event.type == pygame.KEYDOWN:
             if pygame.key.get_pressed()[KEYBIND_MENUBAR_DISABLE[1]]:
                 menubar.toggle_hidden()
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_data = pygame.mouse.get_pressed()
+
+    menubar.update(mouse_data)
 
     screen.fill(UI_COLOR_4)
 

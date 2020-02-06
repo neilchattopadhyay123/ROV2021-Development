@@ -19,6 +19,7 @@ APP_SELECTED_DIMENSION = APP_DIMENSION + UI_PADDING
 
 FOLDER_MENUBAR_OFFSET = MENUBAR_HEIGHT + (UI_SCREEN_PADDING * 2)
 FOLDER_ICON_PATH = 'icon_folder.png'
+FOLDER_OPEN_ICON_PATH = 'icon_folder_open.png'
 
 KEYBIND_MENUBAR_DISABLE = ('P', pygame.K_p)
 KEYBIND_MENUBAR_SHORTCUTS = [('1', pygame.K_1), ('2', pygame.K_2), ('3', pygame.K_3), ('4', pygame.K_4), ('5', pygame.K_5), ('6', pygame.K_6), ('7', pygame.K_7), ('8', pygame.K_8), ('9', pygame.K_9), ('0', pygame.K_0)]
