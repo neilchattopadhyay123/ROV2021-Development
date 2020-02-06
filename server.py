@@ -4,6 +4,7 @@ import struct
 import cv2
 import pygame
 import os
+import random
 import sys
 
 sys.path.insert(1, 'gui')
@@ -120,7 +121,8 @@ def main ():
     clock = pygame.time.Clock()
     
     screen = pygame.display.set_mode(SCREEN_DIMENSION, pygame.RESIZABLE)
-    pygame.display.set_caption('LoggerheadROV Driver Station')
+    pygame.display.set_caption('LoggerheadROV Driver Station | ' + random.choice(QUOTES))
+    pygame.display.set_icon(pygame.image.load('gui/images/loggerhead_logo.png'))
 
     menubar = MenuBar(screen, FONT)
     menubar.add_app(App("Do Thing", menubar))
