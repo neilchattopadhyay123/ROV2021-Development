@@ -1,6 +1,0 @@
-Controls
-
-1 = Hide Menu
-Esc = Exit Fullscreen
-` = Fullcreen
-
