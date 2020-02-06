@@ -8,36 +8,31 @@ root = tk.Tk()
 import time
 from dial import *
 
-
-global horizonDisplay
-
-screen_w = root.winfo_screenwidth()
-screen_h = root.winfo_screenheight()
-horizonDisplay = False
-
 def openHorizon():
-    global horizonDisplay
-
+    horizonDisplay = False
     horizonWindow_w = 300 #Gauge size is set to 300x300 pixels in dial.py
     horizonWindow_h = 300
+    
+    # Initialise screen and set screen pos
+    os.environ['SDL_VIDEO_CENTERED'] = '1'
+    screen = pygame.display.set_mode((horizonWindow_w, horizonWindow_h), pygame.NOFRAME)
+    screen.fill(0x222222)
+    screen.set_alpha(None)
+       
+    # Initialise Dials.
+    horizon = Horizon(0,0)
 
     while not horizonDisplay:
-        # Initialise screen and set screen pos
-        os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (screen_w-horizonWindow_w, screen_h-horizonWindow_h)
-        screen = pygame.display.set_mode((horizonWindow_w, horizonWindow_h), pygame.NOFRAME)
-        screen.fill(0x222222)
-        screen.set_alpha(None)
-           
-        # Initialise Dials.
-        horizon = Horizon(0,0)
-
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                horizonDisplay = True
+        
         # Dummy test data
         curPos = pygame.mouse.get_pos()
-        rf_data = {'RX_est_x':curPos[0]/2, 'RX_est_y':curPos[1]/2}
-        
-        if(not rf_data == None):
-            # Update dials.
-            horizon.update(screen, 127 - rf_data['RX_est_x'], 127 - rf_data['RX_est_y'] )
-            pygame.display.update()
+        rf_data = [curPos[0], curPos[1]]
+
+        horizon.update(screen, rf_data[0] - (horizonWindow_w / 2), rf_data[1] - (horizonWindow_h / 2))
+
+        pygame.display.update()
 
 openHorizon()

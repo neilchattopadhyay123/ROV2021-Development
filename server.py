@@ -14,6 +14,7 @@ from constants import * # Import all constants and functions in constants.py
 from client_thread import ClientThread
 
 from gui_utils import *
+from dial import *
 from menubar import MenuBar
 from app import App
 
@@ -117,12 +118,14 @@ def main ():
     global PI_CLIENT
     global PI_CLIENT_CONNECTED
     global IS_RUNNING
-
-    clock = pygame.time.Clock()
     
     screen = pygame.display.set_mode(SCREEN_DIMENSION, pygame.RESIZABLE)
+    screen.set_alpha(None)
     pygame.display.set_caption('LoggerheadROV Driver Station | ' + random.choice(QUOTES))
     pygame.display.set_icon(pygame.image.load('gui/images/loggerhead_logo.png'))
+
+    clock = pygame.time.Clock()
+    horizon = Horizon(screen.get_size()[0] - GAUGE_DIMENSION - UI_SCREEN_PADDING, screen.get_size()[1] - GAUGE_DIMENSION - UI_SCREEN_PADDING, GAUGE_DIMENSION, GAUGE_DIMENSION)
 
     menubar = MenuBar(screen, FONT)
     menubar.add_app(App("Do Thing", menubar))
@@ -147,6 +150,7 @@ def main ():
 
             if event.type == pygame.VIDEORESIZE:
                 screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                horizon = Horizon(screen.get_size()[0] - GAUGE_DIMENSION - UI_SCREEN_PADDING, screen.get_size()[1] - GAUGE_DIMENSION - UI_SCREEN_PADDING, GAUGE_DIMENSION, GAUGE_DIMENSION)
                 menubar.resize()
 
             if event.type == pygame.KEYDOWN:
@@ -155,9 +159,12 @@ def main ():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_data = pygame.mouse.get_pressed()
 
-        menubar.update(mouse_data, key_data)
+        mouse_pos = pygame.mouse.get_pos()
 
         screen.fill(UI_COLOR_4)
+        
+        menubar.update(mouse_data, key_data)
+        horizon.update(screen, mouse_pos[0] - (screen.get_size()[0] / 2), mouse_pos[1] - (screen.get_size()[1] / 2))
 
         menubar.draw()
         draw_text(screen, FONT, str(round(clock.get_fps(), 3)) + ' FPS', (UI_SCREEN_PADDING, UI_SCREEN_PADDING), False)

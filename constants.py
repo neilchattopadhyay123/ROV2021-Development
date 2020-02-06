@@ -38,13 +38,15 @@ UI_COLOR_2 = pygame.Color('#404b69')
 UI_COLOR_3 = pygame.Color('#f73859')
 UI_COLOR_4 = pygame.Color('#dbedf3')
 
-# UI Menubar
+# UI
 MENUBAR_APP_COUNT = 10
 MENUBAR_HEIGHT = 70
 
 APP_DIMENSION = MENUBAR_HEIGHT - (UI_PADDING * 2)
 APP_SELECTED_DIMENSION = APP_DIMENSION + UI_PADDING
 APP_MENUBAR_OFFSET = MENUBAR_HEIGHT + UI_SCREEN_PADDING
+
+GAUGE_DIMENSION = 200
 
 # Icons
 ICON_UNKNOWN = 'gui/images/icon_unknown.png'
@@ -63,7 +65,10 @@ QUOTES = [
     '"Gooey"',
     '"gENeraL KENoBoiauwdhaiwudn"',
     '"I search \'muscle beds\' and all I received were a bunch of shirtless men lying down."',
-    '"You\'re coating me with your goop!"'
+    '"You\'re coating me with your goop!"',
+    '"We just nat together."',
+    '"I love that kid."',
+    '"TAKE MY CHIPS!!"'
 ]
 
 def LIMIT (value, lower, upper):
