@@ -16,11 +16,17 @@ class MenuBar:
 
         self.resize() # Calculate the size of the menubar
 
-    def update (self, mouse_data):
+    def update (self, mouse_data, key_data):
         # Update all the apps on the menubar
         if not self.is_hidden:
-            for app in self.apps:
-                app.update(mouse_data)
+            if key_data[KEYBIND_MENUBAR_DISABLE[1]]:
+                menubar.toggle_hidden()
+            
+            for i in range(len(self.apps)):
+                self.apps[i].update(mouse_data, key_data)
+
+                if key_data[KEYBIND_MENUBAR_SHORTCUTS[i][1]]:
+                    self.apps[i].run()
         
     def draw (self):
         # If the menubar is not hidden, draw the menubar and the apps on it
@@ -108,10 +114,9 @@ class App:
 
         self.resize()
 
-    def update (self, mouse_data):
+    def update (self, mouse_data, key_data):
         if mouse_data[0] and self.is_selected:
-            if self.function != None:
-                self.function()
+            self.run()
 
             self.is_selected = False
         else:
@@ -122,10 +127,10 @@ class App:
         self.rect = self.selected_rect if self.is_selected else self.idle_rect
 
         if self.is_open:
-            self.sub_app_menubar.update(mouse_data)
+            self.sub_app_menubar.update(mouse_data, key_data)
 
             for sub_app in self.sub_apps:
-                sub_app.update(mouse_data)
+                sub_app.update(mouse_data, key_data)
 
     def draw (self, screen):
         screen.blit(self.icon, self.rect)
@@ -142,6 +147,12 @@ class App:
         self.rect = self.idle_rect
 
         self.resize()
+
+    def run (self):
+        if self.function != None:
+            self.function()
+
+            self.is_selected = False
 
     def resize (self):
         self.sub_app_menubar.resize()

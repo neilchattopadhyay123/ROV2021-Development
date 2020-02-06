@@ -31,6 +31,7 @@ is_running = True
 
 while is_running:
     mouse_data = (False, False, False)
+    key_data = [False] * len(pygame.key.get_pressed())
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -42,13 +43,12 @@ while is_running:
             menubar.resize()
 
         if event.type == pygame.KEYDOWN:
-            if pygame.key.get_pressed()[KEYBIND_MENUBAR_DISABLE[1]]:
-                menubar.toggle_hidden()
+            key_data = pygame.key.get_pressed()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_data = pygame.mouse.get_pressed()
 
-    menubar.update(mouse_data)
+    menubar.update(mouse_data, key_data)
 
     screen.fill(UI_COLOR_4)
 
