@@ -30,7 +30,7 @@ server_folder.add_app(sub_server_folder)
 is_running = True
 
 while is_running:
-    mouse_data = (False, False, False)
+    mouse_data = [False] * len(pygame.mouse.get_pressed())
     key_data = [False] * len(pygame.key.get_pressed())
     
     for event in pygame.event.get():

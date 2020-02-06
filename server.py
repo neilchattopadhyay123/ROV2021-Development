@@ -2,16 +2,31 @@ import socket
 import pickle
 import struct
 import cv2
+import pygame
+import os
+import sys
+
+sys.path.insert(1, 'gui')
 
 from threading import Thread
 from constants import * # Import all constants and functions in constants.py
 from client_thread import ClientThread
 
+from gui_utils import *
+from menubar import MenuBar
+from app import App
+
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+
+pygame.init()
+
 SERVER_SOCKET = None # The server socket object
 PI_CLIENT = None # The client connection object
 PI_CLIENT_CONNECTED = False # Whether the client is connected or not
 
-RUNNING = True # Whether the server is running
+FONT = pygame.font.Font('gui/unispace/unispace.ttf', 12)
+
+IS_RUNNING = True # Whether the server is IS_RUNNING
 
 def handle_connection (connection, address):
     ''' Handle clients trying to connect to the server '''
@@ -46,7 +61,7 @@ def handle_connection (connection, address):
 def connection_listener ():
     ''' Listens for incoming clients that want to connect to the server '''
     
-    global RUNNING
+    global IS_RUNNING
     global SERVER_SOCKET
 
     # Create socket object
@@ -67,7 +82,7 @@ def connection_listener ():
     # Start listening for connections
     SERVER_SOCKET.listen(1)
 
-    while RUNNING:
+    while IS_RUNNING:
         try:
             # If a client connects, get the connection object and the address
             conn, address = SERVER_SOCKET.accept()
@@ -79,35 +94,81 @@ def connection_listener ():
             connection_thread.join() # Wait for the connection to disconnect
         except:
             pass
-
-    SERVER_SOCKET.close()
     
     PRINT('Socket closed.', SUCCESS)
+
+def shutdown ():
+    ''' Method that is called when the server is shutting down '''
+
+    global PI_CLIENT
+    global IS_RUNNING
+
+    if PI_CLIENT != None:
+        PI_CLIENT.push_command(COMMAND_QUIT)
+
+    SERVER_SOCKET.close()
+                    
+    IS_RUNNING = False
 
 def main ():
     ''' The main method :o '''
     
     global PI_CLIENT
     global PI_CLIENT_CONNECTED
-    global RUNNING
+    global IS_RUNNING
+
+    clock = pygame.time.Clock()
+    
+    screen = pygame.display.set_mode(SCREEN_DIMENSION, pygame.RESIZABLE)
+    pygame.display.set_caption('LoggerheadROV Driver Station')
+
+    menubar = MenuBar(screen, FONT)
+    menubar.add_app(App("Do Thing", menubar))
+    menubar.add_app(App("Do Other Thing", menubar))
+
+    folder = App("Folder That Holds More Things", menubar, is_folder=True)
+    folder.add_app(App("More Things", folder.sub_app_menubar))
+    
+    menubar.add_app(folder)
 
     # Create thread for the connection handler loop
     connection_handler = Thread(target=connection_listener, args=())
     connection_handler.start()
 
-    while RUNNING:
+    while IS_RUNNING:
+        mouse_data = [False] * len(pygame.mouse.get_pressed())
+        key_data = [False] * len(pygame.key.get_pressed())
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                shutdown()
+
+            if event.type == pygame.VIDEORESIZE:
+                screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                menubar.resize()
+
+            if event.type == pygame.KEYDOWN:
+                key_data = pygame.key.get_pressed()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_data = pygame.mouse.get_pressed()
+
+        menubar.update(mouse_data, key_data)
+
+        screen.fill(UI_COLOR_4)
+
+        menubar.draw()
+        draw_text(screen, FONT, str(round(clock.get_fps(), 3)) + ' FPS', (UI_SCREEN_PADDING, UI_SCREEN_PADDING), False)
+
+        pygame.display.update()
+        clock.tick(FPS)
+        
         if PI_CLIENT_CONNECTED:
             try:
                 # Get the video frame from the client and decode it
                 frame = cv2.imdecode(PI_CLIENT.recv_data[DATA_IDX_VIDEO], cv2.IMREAD_COLOR)
 
                 cv2.imshow('frame', frame)
-
-                # If the 'q' key is pressed, shut down the server
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    PI_CLIENT.push_command(COMMAND_QUIT)
-                    
-                    RUNNING = False
             except:
                 pass
 
@@ -118,3 +179,5 @@ def main ():
 
 if __name__ == '__main__':
     main()
+
+pygame.quit()

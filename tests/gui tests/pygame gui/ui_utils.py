@@ -2,7 +2,6 @@ import pygame
 
 SCREEN_DIMENSION = (960, 540)
 
-UI_MAIN_THEME_PATH = 'loggerhead-theme.json'
 UI_COLOR_1 = pygame.Color('#283149')
 UI_COLOR_2 = pygame.Color('#404b69')
 UI_COLOR_3 = pygame.Color('#f73859')
