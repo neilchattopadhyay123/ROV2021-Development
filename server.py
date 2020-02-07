@@ -6,6 +6,7 @@ import pygame
 import os
 import random
 import sys
+import numpy as np
 
 sys.path.insert(1, 'gui')
 
@@ -164,22 +165,27 @@ def main ():
         screen.fill(UI_COLOR_4)
         
         menubar.update(mouse_data, key_data)
-        horizon.update(screen, mouse_pos[0] - (screen.get_size()[0] / 2), mouse_pos[1] - (screen.get_size()[1] / 2))
+        horizon.update(screen, mouse_pos[0] - (screen.get_size()[0] / 2), mouse_pos[1] - (screen.get_size()[1] / 2)) # Draws gauge too
 
         menubar.draw()
         draw_text(screen, FONT, str(round(clock.get_fps(), 3)) + ' FPS', (UI_SCREEN_PADDING, UI_SCREEN_PADDING), False)
-
-        pygame.display.update()
-        clock.tick(FPS)
         
         if PI_CLIENT_CONNECTED:
             try:
                 # Get the video frame from the client and decode it
                 frame = cv2.imdecode(PI_CLIENT.recv_data[DATA_IDX_VIDEO], cv2.IMREAD_COLOR)
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                frame = np.rot90(frame)
+                frame = pygame.surfarray.make_surface(frame)
 
-                cv2.imshow('frame', frame)
+                screen.blit(frame, screen.get_size())
+
+                # cv2.imshow('frame', frame)
             except:
                 pass
+
+        pygame.display.update()
+        clock.tick(FPS)
 
     cv2.destroyAllWindows()
     connection_handler.join()

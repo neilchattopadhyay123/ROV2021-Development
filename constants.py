@@ -4,7 +4,7 @@ import pygame
 
 # Socket info
 HOST = '192.168.2.1' # The server ip
-PORT = 6969 # The port to connect over
+PORT = 6900 # The port to connect over
 TIMEOUT = 5 # The time without data being sent before the server disconnects from the client
 PAYLOAD_SIZE = struct.calcsize(">L")
 PACKET_SIZE = 2048 # The size of each packet of data being sent over
@@ -68,7 +68,8 @@ QUOTES = [
     '"You\'re coating me with your goop!"',
     '"We just nat together."',
     '"I love that kid."',
-    '"TAKE MY CHIPS!!"'
+    '"TAKE MY CHIPS!!"',
+    '"disableableable"'
 ]
 
 def LIMIT (value, lower, upper):
