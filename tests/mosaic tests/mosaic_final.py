@@ -9,13 +9,36 @@ refPt = []
 # resulting images
 results = []
 
-original_image1 = cv2.resize(cv2.imread("/home/neil/Downloads/photomosaic2.jpg"), (756, 900))
-image1 = original_image1.copy()
+# finds out if the long side is
+while True:
+    yes_no = input("is long side on the left(y for yes, n for no): ")
 
-original_image2 = cv2.resize(cv2.imread("/home/neil/Downloads/photomosaic1.jpg"), (756, 900))
-image2 = original_image2.copy()
+    if yes_no == 'y' or yes_no == 'yes':
+        yes_no = False
+        break
+    elif yes_no == 'n' or yes_no == 'no':
+        yes_no = True
+        break
+
+# stores whether or not the long side is on the left
+reverse = yes_no
+
+# mirrors image if long side is on the right so that long side is on the left
+if reverse:
+    original_image1 = cv2.flip(cv2.resize(cv2.imread("/home/neil/MATE2020/Images/photomosaic2_imageflipped.jpg"), (756, 900)), 1)
+    image1 = original_image1.copy()
+
+    original_image2 = cv2.flip(cv2.resize(cv2.imread("/home/neil/MATE2020/Images/photomosaic1_imageflipped.jpg"), (756, 900)), 1)
+    image2 = original_image2.copy()
+else:
+    original_image1 = cv2.resize(cv2.imread("/home/neil/Downloads/photomosaic2.jpg"), (756, 900))
+    image1 = original_image1.copy()
+
+    original_image2 = cv2.resize(cv2.imread("/home/neil/Downloads/photomosaic1.jpg"), (756, 900))
+    image2 = original_image2.copy()
 
 
+# does perspective transform on image
 def four_point_transform(image, pts):
     # obtain a consistent order of the points and unpack them
     # individually
@@ -54,18 +77,20 @@ def four_point_transform(image, pts):
     return warped
 
 
+# stores the xy coordinate and plots the reference point for image1 for perspective transform
 def find_point_image1(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDBLCLK:
         cv2.circle(image1, (x, y), 5, (255, 0, 0), -1)
         refPt.append([x, y])
 
 
+# stores the xy coordinate and plots the reference point for image1 for perspective transform
 def find_point_image2(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDBLCLK:
         cv2.circle(image2, (x, y), 5, (255, 0, 0), -1)
         refPt.append([x, y])
 
-
+# stitches the new images to create the photomosaic
 def stitch(files):
     (width1, height1) = files[0].size  # takes jpg image resolution and makes it into width and height for the graph
     (width2, height2) = files[1].size
@@ -75,6 +100,7 @@ def stitch(files):
     result_width = width1 + width2 + width3 + width4  # creates total graph width
     result_height = height1 + height2  # creates total graph height
 
+    # pastes together the images
     output = Image.new('RGB', (result_width, result_height))
     output.paste(im=files[0], box=(0, 512))
     output.paste(im=files[1], box=(1024, 512))
@@ -84,55 +110,77 @@ def stitch(files):
 
     return output
 
-
+# creates a window for image1
 cv2.startWindowThread()
 cv2.namedWindow('image1')
 cv2.setMouseCallback('image1', find_point_image1)
 
+# plots and shows reference points and image1 for perspective transform
 for i in range(0, 3):
     while True:
         cv2.imshow('image1', image1)
+
+        # allows for user to do the next perspective transform by pressing ESC
         if cv2.waitKey(20) & 0xFF == 27:
             break
 
+    # adds image from perspective transform to results
     results.append(four_point_transform(image1, np.float32(refPt)))
+
+    # emptys reference points for the next perspective transform
     refPt = []
+
+    # clears image
     image1 = original_image1
 
+    # destroys the window when three images have been made for the photomosaic
     if i == 3:
         cv2.destroyAllWindows()
 
-
+# creates a window for image1
 cv2.startWindowThread()
 cv2.namedWindow('image2')
 cv2.setMouseCallback('image2', find_point_image2)
 
+# plots and shows reference points and image1 for perspective transform
 for i in range(0, 2):
     while True:
         cv2.imshow('image2', image2)
+
+        # allows for user to do the next perspective transform by pressing ESC
         if cv2.waitKey(20) & 0xFF == 27:
             break
 
+    # adds image from perspective transform to results
     results.append(four_point_transform(image2, np.float32(refPt)))
+
+    # emptys reference points for the next perspective transform
     refPt.clear()
+
+    # clears image
     image2 = original_image2
 
+    # destroys the window when two images have been made for the photomosaic
     if i == 2:
         cv2.destroyAllWindows()
 
+# stores results as PIL image objects
 pil_images = []
 
+# converts results which are opencv images to PIL image objects
 for i in range(len(results)):
     img = cv2.cvtColor(results[i], cv2.COLOR_BGR2RGB)
     img = Image.fromarray(img)
     pil_images.append(img)
 
+# resizes the images properly
 pil_images[0] = pil_images[0].resize((1024, 512))
 pil_images[1] = pil_images[1].resize((512, 512))
 pil_images[2] = pil_images[2].resize((1024, 512))
 pil_images[3] = pil_images[3].resize((1024, 512))
 pil_images[4] = pil_images[4].resize((512, 512))
 
+# stitchs the PIL images to get the final photomosaic and shows it using matplotlib
 result = stitch(pil_images)
 plt.imshow(result)
 plt.show()
