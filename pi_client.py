@@ -18,17 +18,20 @@ def main ():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
 
-    PRINT('Connected to ' + ENC_VALUE(HOST + ':'+ PORT) + '.', SUCCESS)
+    PRINT('Connected to ' + ENC_VALUE(HOST + ':' + str(PORT)) + '.', SUCCESS)
 
     # Start the camera video thread
     stream = VideoStream().start()
 
     while RUNNING:
         # Get the current frame read by the video stream
-        _, frame = cv2.imencode('.jpg', stream.read(), ENCODE_PARAM)
+        try:
+            _, frame = cv2.imencode('.jpg', stream.read(), ENCODE_PARAM)
 
-        # Send data
-        send(s, [frame])
+            # Send data
+            send(s, [frame])
+        except Exception as e:
+            PRINT(str(e), ERROR)
 
         # Recieve data
         recv_data = recv(s)
