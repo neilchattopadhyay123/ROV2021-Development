@@ -28,7 +28,7 @@ def main ():
         _, frame = cv2.imencode('.jpg', stream.read(), ENCODE_PARAM)
 
         # Send data
-        send(s, [frame])]
+        send(s, [frame])
 
         # Recieve data
         recv_data = recv(s)
