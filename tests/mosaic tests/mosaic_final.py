@@ -132,7 +132,7 @@ for i in range(0, 3):
     refPt = []
 
     # clears image
-    image1 = original_image1
+    image1 = original_image1.copy()
 
     # destroys the window when three images have been made for the photomosaic
     if i == 3:
@@ -159,7 +159,7 @@ for i in range(0, 2):
     refPt.clear()
 
     # clears image
-    image2 = original_image2
+    image2 = original_image2.copy()
 
     # destroys the window when two images have been made for the photomosaic
     if i == 2:
