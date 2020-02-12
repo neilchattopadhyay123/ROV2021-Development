@@ -26,16 +26,16 @@ reverse = yes_no
 
 # mirrors image if long side is on the right so that long side is on the left
 if reverse:
-    original_image1 = cv2.flip(cv2.resize(cv2.imread("/home/neil/MATE2020/Images/photomosaic2_imageflipped.jpg"), (756, 900)), 1)
+    original_image1 = cv2.flip(cv2.resize(cv2.imread("Images/photomosaic1_imageflipped.jpg"), (756, 900)), 1)
     image1 = original_image1.copy()
 
-    original_image2 = cv2.flip(cv2.resize(cv2.imread("/home/neil/MATE2020/Images/photomosaic1_imageflipped.jpg"), (756, 900)), 1)
+    original_image2 = cv2.flip(cv2.resize(cv2.imread("Images/photomosaic2_imageflipped.jpg"), (756, 900)), 1)
     image2 = original_image2.copy()
 else:
-    original_image1 = cv2.resize(cv2.imread("/home/neil/Downloads/photomosaic2.jpg"), (756, 900))
+    original_image1 = cv2.resize(cv2.imread("Images/photomosaic1.jpg"), (756, 900))
     image1 = original_image1.copy()
 
-    original_image2 = cv2.resize(cv2.imread("/home/neil/Downloads/photomosaic1.jpg"), (756, 900))
+    original_image2 = cv2.resize(cv2.imread("Images/photomosaic2.jpg"), (756, 900))
     image2 = original_image2.copy()
 
 
