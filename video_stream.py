@@ -13,10 +13,11 @@ class VideoStream:
 
         # Setup camera settings
         self.camera.resolution = CAMERA_RES # Set camera resolution
-        self.camera.framerate = 20 # Set camera fps
-        self.camera.shutter_speed = 1000 # Set camera shutter speed
-        self.camera.brightness = 65 # Set camera brightness
-        self.camera.awb_mode = 'incandescent' # Set camera auto white balance
+        self.camera.mode = CAMERA_MODE # Set the aspect ratio of the camera
+        self.camera.framerate = CAMERA_FPS # Set camera fps
+        self.camera.shutter_speed = CAMERA_SHUTTER_SPEED # Set camera shutter speed
+        self.camera.brightness = CAMERA_BRIGHTNESS # Set camera brightness
+        self.camera.awb_mode = CAMERA_AWB_MODE # Set camera auto white balance
 
         # Create a thread for getting images from the camera
         self.thread = Thread(target=self.update, args=())

@@ -19,6 +19,11 @@ COMMAND_QUIT = 'quit'
 
 # Camera info
 CAMERA_RES = (640, 480) # Resolution of the camera
+CAMERA_MODE = 5 # Camera aspect ratio mode
+CAMERA_FPS = 20
+CAMERA_SHUTTER_SPEED = 1000
+CAMERA_BRIGHTNESS = 65
+CAMERA_AWB_MODE = 'incandescent'
 
 # Print types
 DEBUG = 'DEBUG'
@@ -40,13 +45,13 @@ UI_COLOR_4 = pygame.Color('#dbedf3')
 
 # UI
 MENUBAR_APP_COUNT = 10
-MENUBAR_HEIGHT = 70
+MENUBAR_HEIGHT = 50
 
 APP_DIMENSION = MENUBAR_HEIGHT - (UI_PADDING * 2)
 APP_SELECTED_DIMENSION = APP_DIMENSION + UI_PADDING
 APP_MENUBAR_OFFSET = MENUBAR_HEIGHT + UI_SCREEN_PADDING
 
-GAUGE_DIMENSION = 200
+GAUGE_DIMENSION = 150
 
 # Icons
 ICON_UNKNOWN = 'gui/images/icon_unknown.png'
@@ -64,7 +69,7 @@ QUOTES = [
     '"Hello there!"',
     '"Gooey"',
     '"gENeraL KENoBoiauwdhaiwudn"',
-    '"I search \'muscle beds\' and all I received were a bunch of shirtless men lying down."',
+    '"I searched \'muscle beds\' and all I received were a bunch of shirtless men lying down."',
     '"You\'re coating me with your goop!"',
     '"We just nat together."',
     '"I love that kid."',

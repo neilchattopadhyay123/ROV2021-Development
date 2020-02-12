@@ -2,11 +2,13 @@ import math
 import pygame
 import sys
 
+from constants import *
+
 class Dial:
    """
    Generic dial type.
    """
-   def __init__(self, image, frameImage, x=0, y=0, w=0, h=0):
+   def __init__(self, image, x=0, y=0):
        """
        x,y = coordinates of top left of dial.
        w,h = Width and Height of dial.
@@ -14,20 +16,14 @@ class Dial:
        
        self.x = x 
        self.y = y
+       self.w = GAUGE_DIMENSION
+       self.h = GAUGE_DIMENSION
        
        self.image = image
-       self.frameImage = frameImage
        
-       self.dial = pygame.Surface(self.frameImage.get_rect()[2:4])
+       self.dial = pygame.Surface((self.w, self.h))
        self.dial.fill(0xFFFF00)
        
-       if(w == 0):
-          w = self.frameImage.get_rect()[2]
-       if(h == 0):
-          h = self.frameImage.get_rect()[3]
-          
-       self.w = w
-       self.h = h
        self.pos = self.dial.get_rect()
        self.pos = self.pos.move(x, y)
 
@@ -58,8 +54,9 @@ class Dial:
        If you need to offset the centre, resize the image using self.clip.
        This is used to rotate dial needles and probably doesn't need to be used externally.
        """
-       
-       tmpImage = pygame.transform.rotate(image, angle)
+
+       tmpImage = pygame.transform.scale(image, (int(image.get_size()[0] * 0.75), int(image.get_size()[1] * 0.75)))
+       tmpImage = pygame.transform.rotate(tmpImage, angle)
        imageCentreX = tmpImage.get_rect()[0] + tmpImage.get_rect()[2] / 2
        imageCentreY = tmpImage.get_rect()[1] + tmpImage.get_rect()[3] / 2
 
@@ -69,6 +66,7 @@ class Dial:
        imageOut = pygame.Surface((targetWidth, targetHeight))
        imageOut.fill(0xFFFF00)
        imageOut.set_colorkey(0xFFFF00)
+       
        imageOut.blit(tmpImage,(0, 0), pygame.Rect(imageCentreX - targetWidth / 2, imageCentreY - targetHeight / 2, targetWidth, targetHeight))
        
        return imageOut
@@ -79,11 +77,6 @@ class Dial:
        This is put on to "imageOut" at an offset of oX,oY if required.
        This is used to centre dial needles and probably doesn't need to be used externally.       
        """
-       
-       if(w==0):
-           w = image.get_rect()[2]
-       if(h==0):
-           h = image.get_rect()[3]
            
        needleW = w + 2 * math.sqrt(oX * oX)
        needleH = h + 2 * math.sqrt(oY * oY)
@@ -96,7 +89,7 @@ class Dial:
        
        return imageOut
 
-   def overlay(self, image, x, y, r=0):
+   def overlay(self, image, x, y):
        """
        Overlays one image on top of another using 0xFFFF00 (Yellow) as the overlay colour.
        """
@@ -113,17 +106,16 @@ class Horizon(Dial):
    Artificial horizon dial.
    """
    
-   def __init__(self, x=0, y=0, w=0, h=0):
+   def __init__(self, x=0, y=0):
        """
        Initialise dial at x,y.
        Default size of 300px can be overidden using w,h.
        """
        
        self.image = pygame.image.load('gui/images/Horizon_GroundSky.png').convert()
-       self.frameImage = pygame.image.load('gui/images/Horizon_Background.png').convert()
        self.maquetteImage = pygame.image.load('gui/images/Maquette_Avion.png').convert()
        
-       Dial.__init__(self, self.image, self.frameImage, x, y, w, h)
+       Dial.__init__(self, self.image, x, y)
        
    def update(self, screen, angleX, angleY):
        """
@@ -146,11 +138,9 @@ class Horizon(Dial):
        tmpImage = self.rotate(tmpImage, angleX)
        
        self.overlay(tmpImage, 0, 0)
-       self.overlay(self.frameImage, 0,0)
        self.overlay(self.maquetteImage, 0,0)
        
        self.dial.set_colorkey(0xFFFF00)
-       
-       screen.blit(pygame.transform.scale(self.dial,(self.w, self.h)), self.pos)
-       
 
+       pygame.draw.rect(screen, UI_COLOR_1, pygame.Rect((self.x - UI_BORDER, self.y - UI_BORDER), (self.w + (UI_BORDER * 2), self.h + (UI_BORDER * 2))))
+       screen.blit(pygame.transform.scale(self.dial,(self.w, self.h)), self.pos)

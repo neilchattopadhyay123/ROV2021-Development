@@ -126,7 +126,7 @@ def main ():
     pygame.display.set_icon(pygame.image.load('gui/images/loggerhead_logo.png'))
 
     clock = pygame.time.Clock()
-    horizon = Horizon(screen.get_size()[0] - GAUGE_DIMENSION - UI_SCREEN_PADDING, screen.get_size()[1] - GAUGE_DIMENSION - UI_SCREEN_PADDING, GAUGE_DIMENSION, GAUGE_DIMENSION)
+    horizon = Horizon(screen.get_size()[0] - GAUGE_DIMENSION - UI_SCREEN_PADDING - UI_BORDER, screen.get_size()[1] - GAUGE_DIMENSION - UI_SCREEN_PADDING - UI_BORDER)
 
     menubar = MenuBar(screen, FONT)
     menubar.add_app(App("Do Thing", menubar))
@@ -151,7 +151,7 @@ def main ():
 
             if event.type == pygame.VIDEORESIZE:
                 screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-                horizon = Horizon(screen.get_size()[0] - GAUGE_DIMENSION - UI_SCREEN_PADDING, screen.get_size()[1] - GAUGE_DIMENSION - UI_SCREEN_PADDING, GAUGE_DIMENSION, GAUGE_DIMENSION)
+                horizon = Horizon(screen.get_size()[0] - GAUGE_DIMENSION - UI_SCREEN_PADDING - UI_BORDER, screen.get_size()[1] - GAUGE_DIMENSION - UI_SCREEN_PADDING - UI_BORDER)
                 menubar.resize()
 
             if event.type == pygame.KEYDOWN:
