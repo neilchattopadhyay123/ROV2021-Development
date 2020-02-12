@@ -34,7 +34,7 @@ class ClientThread:
 
             # Check if the client is to be disconnected
             if self.command == COMMAND_QUIT:
-                self.running = false
+                self.running = False
 
             # Reset the command so it doesn't send the same thing multiple times
             self.command = ''
@@ -48,4 +48,4 @@ class ClientThread:
         
         self.command = command
         
-        PRINT('Sending command ' + ENC_VALUE(self.command) + ' to ' + ENC_VALUE(address[0]) + '...', INFO)
+        PRINT('Sending command ' + ENC_VALUE(self.command) + ' to ' + ENC_VALUE(self.address[0]) + '...', INFO)
