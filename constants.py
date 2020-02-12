@@ -69,7 +69,8 @@ QUOTES = [
     '"We just nat together."',
     '"I love that kid."',
     '"TAKE MY CHIPS!!"',
-    '"disableableable"'
+    '"disableableable"',
+    '"I did a scientific thingamajig."'
 ]
 
 def LIMIT (value, lower, upper):
