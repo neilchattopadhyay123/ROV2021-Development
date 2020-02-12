@@ -3,20 +3,25 @@ import numpy as np
 
 from matplotlib import pyplot as plt
 
-img = cv2.imread("C:/Users/emrer/Pictures/coins.png")
-img = cv2.GaussianBlur(img, (21,21), cv2.BORDER_DEFAULT)
+img = cv2.imread("C:/Users/emrer/Pictures/musselLarge.PNG")
+#img = cv2.GaussianBlur(img, (21,21), cv2.BORDER_DEFAULT)
 img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 ret, thresh = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
 
 
-all_circs = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 0.9, 120, param1 = 50, param2 = 30, minRadius = 60, maxRadius=120)
+all_circs = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 0.9, 0.1, param1 = 100, param2 = 10, minRadius = 1, maxRadius=5)
 all_circs_rounded = np.uint16(np.around(all_circs))
 
 print (all_circs_rounded)
 print (all_circs_rounded.shape)
-print ('Found' + str(all_circs_rounded.shape[1])+'circles.')
+print ('Found ' + str(all_circs_rounded.shape[1])+' circles.')
 
 
+circles = np.uint16(np.around(all_circs_rounded))
+for i in circles[0,:]:
+    cv2.circle(img,(i[0],i[1]),i[2],(0,255,0),2)
+    cv2.circle(img,(i[0],i[1]),2,(0,0,255),3)
+    
 cv2.imshow('circles',img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
