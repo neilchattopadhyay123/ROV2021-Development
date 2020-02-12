@@ -2,6 +2,7 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 from constants import *
 from threading import Thread
+import time
 
 class VideoStream:
     def __init__(self):
@@ -20,9 +21,14 @@ class VideoStream:
         # Create a thread for getting images from the camera
         self.thread = Thread(target=self.update, args=())
         self.frame = None
+        self.running = False
+
+        time.sleep(1.5)
 
     def start(self):
         ''' Begin reading the camera frames '''
+        
+        self.running = True
         
         self.thread.start()
 
@@ -33,7 +39,7 @@ class VideoStream:
     def update(self):
         ''' The main thread loop for getting the current camera images '''
         
-        while True:
+        while self.running:
             # Get a picture from the camera and save it to a variable which can be accessed outside of the class
             self.camera.capture(self._rawCapture, format="bgr", use_video_port=True)
             self.frame = self._rawCapture.array
@@ -47,6 +53,8 @@ class VideoStream:
 
     def stop(self):
         ''' Stop capturing frames and stop running the thread '''
+        
+        self.running = False
         
         self.thread.join()
         self.camera.close()
