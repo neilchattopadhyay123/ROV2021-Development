@@ -134,7 +134,7 @@ class Horizon(Dial):
        elif (angleY > 270):
            angleY -= 360
            
-       tmpImage = self.clip(self.image, 0, (59 - angleY) * 720 / 180, 250, 250)
+       tmpImage = self.clip(self.image, 0, (59 - angleY) * 720 / 180, 450, 450)
        tmpImage = self.rotate(tmpImage, angleX)
        
        self.overlay(tmpImage, 0, 0)
