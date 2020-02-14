@@ -26,7 +26,8 @@ def main ():
     while RUNNING:
         # Get the current frame read by the video stream
         try:
-            _, frame = cv2.imencode('.jpg', stream.read(), ENCODE_PARAM)
+            stream_frame = stream.read()
+            _, frame = cv2.imencode('.jpg', stream_frame, ENCODE_PARAM)
 
             # Send data
             send(s, [frame])

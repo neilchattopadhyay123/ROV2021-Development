@@ -18,9 +18,9 @@ DATA_IDX_VIDEO = 0
 COMMAND_QUIT = 'quit'
 
 # Camera info
-CAMERA_RES = (640, 480) # Resolution of the camera
+CAMERA_RES = (32*32, 16*32) # Resolution of the camera
 CAMERA_MODE = 5 # Camera aspect ratio mode
-CAMERA_FPS = 20
+CAMERA_FPS = 30
 CAMERA_SHUTTER_SPEED = 1000
 CAMERA_BRIGHTNESS = 65
 CAMERA_AWB_MODE = 'incandescent'
