@@ -172,7 +172,9 @@ def main ():
                 frame = np.rot90(frame)
                 frame = pygame.surfarray.make_surface(frame)
 
-                screen.blit(frame, pygame.Rect((0, 0), screen.get_size()))
+                frame = pygame.transform.scale(frame, screen.get_size())
+
+                screen.blit(frame, (0, 0))
 
                 # cv2.imshow('frame', frame)
             except:
