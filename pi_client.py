@@ -43,6 +43,8 @@ def main ():
             
             RUNNING = False
 
+        PRINT(recv_data[DATA_IDX_JOYSTICK])
+
     s.close()
     stream.stop()
 

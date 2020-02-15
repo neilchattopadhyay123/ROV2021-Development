@@ -31,7 +31,7 @@ FONT = pygame.font.Font('gui/unispace/unispace.ttf', 12)
 
 IS_RUNNING = True # Whether the server is IS_RUNNING
 
-def handle_connection (connection, address):
+def handle_connection (connection, address, joysticks):
     ''' Handle clients trying to connect to the server '''
     
     global PI_CLIENT
@@ -40,7 +40,7 @@ def handle_connection (connection, address):
     PRINT('Handling connection from ' + ENC_VALUE(address[0]) + '...', INFO)
 
     # Create a new client thread for the incoming client
-    PI_CLIENT = ClientThread()
+    PI_CLIENT = ClientThread(joysticks[0])
     PI_CLIENT_CONNECTED = True
 
     try:
@@ -61,7 +61,7 @@ def handle_connection (connection, address):
         PRINT('Could not run client for ' + ENC_VALUE(address[0]) + '.', ERROR)
         PRINT('| ' + str(e), ERROR)
         
-def connection_listener ():
+def connection_listener (joysticks):
     ''' Listens for incoming clients that want to connect to the server '''
     
     global IS_RUNNING
@@ -92,7 +92,7 @@ def connection_listener ():
             conn.settimeout(TIMEOUT)
 
             # Start a connection handler thread to begin reading and writing data
-            connection_thread = Thread(target=handle_connection, args=(conn, address))
+            connection_thread = Thread(target=handle_connection, args=(conn, address, joysticks))
             connection_thread.start()
             connection_thread.join() # Wait for the connection to disconnect
         except:
@@ -119,6 +119,15 @@ def main ():
     global PI_CLIENT
     global PI_CLIENT_CONNECTED
     global IS_RUNNING
+
+    joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+    PRINT('Found ' + ENC_VALUE(len(joysticks)) + ' joysticks.', INFO)
+
+    # Initialize detected joysticks
+    if len(joysticks) > 0:
+        for joystick in joysticks:
+            joystick.init()
+            PRINT('| ' + ENC_VALUE(joystick.get_id()) + ' ' + ENC_VALUE(joystick.get_name()), INFO)
     
     screen = pygame.display.set_mode(SCREEN_DIMENSION, pygame.RESIZABLE)
     screen.set_alpha(None)
@@ -131,14 +140,12 @@ def main ():
     menubar = MenuBar(screen, FONT)
     menubar.add_app(App("Do Thing", menubar))
     menubar.add_app(App("Do Other Thing", menubar))
-
     folder = App("Folder That Holds More Things", menubar, is_folder=True)
     folder.add_app(App("More Things", folder.sub_app_menubar))
-    
     menubar.add_app(folder)
 
     # Create thread for the connection handler loop
-    connection_handler = Thread(target=connection_listener, args=())
+    connection_handler = Thread(target=connection_listener, args=(joysticks))
     connection_handler.start()
 
     while IS_RUNNING:

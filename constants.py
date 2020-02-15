@@ -12,6 +12,7 @@ ENCODE_PARAM = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
 
 # Command indexes
 DATA_IDX_COMMAND = 0
+DATA_IDX_JOYSTICK = 1
 DATA_IDX_VIDEO = 0
 
 # Commands
@@ -75,7 +76,14 @@ QUOTES = [
     '"I love that kid."',
     '"TAKE MY CHIPS!!"',
     '"disableableable"',
-    '"I did a scientific thingamajig."'
+    '"I did a scientific thingamajig."',
+    '"Budget Boy!"',
+    '"Did you ever hear of the tragedy of Darth Plagueis the Wise? I thought not. It\'s not a story the Jedi would tell you."',
+    '"Darth Plagueis was a dark lord of the Sith, so powerful and so wise, he could use the Force to influence the Midiclorians to create life."',
+    '"He had such a knowledge of the Dark Side, that he could even keep the ones he cared about from dying."',
+    '"The Dark Side of the Force is a pathway to many abilites some consider to be uNNATURAL."',
+    '"He became so powerful, the only thing that he was afraid of was losing his power, which eventually of course he did."',
+    '"Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."'
 ]
 
 def LIMIT (value, lower, upper):
