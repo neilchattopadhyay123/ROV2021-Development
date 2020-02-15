@@ -34,13 +34,13 @@ class ClientThread:
         while self.running:
             # Recieve data
             self.recv_data = recv(self.connection)
-
+            
             # Get joystick value
             try:
                 for i in range(self.joystick.get_numbuttons()): # Update joystick button values
                     self.joystick_buttons[i] = bool(self.joystick.get_button(i))
                 for i in range(self.joystick.get_numaxes()): # Update joystick axis values
-                    self.joystick_axes[i] = smooth_input(self.joystick.get_axis(i))
+                    self.joystick_axes[i] = self.joystick.get_axis(i)
                 for i in range(self.joystick.get_numhats()):  # Update joystick hat values
                     if self.joystick.get_hat(i)[1] > 0:
                         self.joystick_hats[DPAD_UP + (4 * i)] = True
@@ -60,7 +60,7 @@ class ClientThread:
                         self.joystick_hats[DPAD_LEFT + (4 * i)] = False
             except:
                 pass
-
+                
             # Send data
             send(self.connection, [self.command, [self.joystick_buttons, self.joystick_axes, self.joystick_hats]])
 

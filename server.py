@@ -145,7 +145,7 @@ def main ():
     menubar.add_app(folder)
 
     # Create thread for the connection handler loop
-    connection_handler = Thread(target=connection_listener, args=(joysticks))
+    connection_handler = Thread(target=connection_listener, args=(joysticks,))
     connection_handler.start()
 
     while IS_RUNNING:
