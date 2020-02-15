@@ -11,9 +11,9 @@ class ClientThread:
 
         self.joystick = joystick
         if joystick != None:
-            self.joystick_buttons = [False] * self.__joystick.get_numbuttons()
-            self.joystick_axes = [0.0] * self.__joystick.get_numaxes()
-            self.joystick_hats = [False] * (self.__joystick.get_numhats() * 4) # 0 = TOP, 1 = RIGHT, 2 = DOWN, 3 = LEFT
+            self.joystick_buttons = [False] * self.joystick.get_numbuttons()
+            self.joystick_axes = [0.0] * self.joystick.get_numaxes()
+            self.joystick_hats = [False] * (self.joystick.get_numhats() * 4) # 0 = TOP, 1 = RIGHT, 2 = DOWN, 3 = LEFT
         
         self.recv_data = [] # The data recieved
         self.command = '' # The command that is going to be sent to the client
@@ -40,7 +40,7 @@ class ClientThread:
                 for i in range(self.joystick.get_numbuttons()): # Update joystick button values
                     self.joystick_buttons[i] = bool(self.joystick.get_button(i))
                 for i in range(self.joystick.get_numaxes()): # Update joystick axis values
-                    self.joystick_axes[i] = smooth_input(self.__joystick.get_axis(i))
+                    self.joystick_axes[i] = smooth_input(self.joystick.get_axis(i))
                 for i in range(self.joystick.get_numhats()):  # Update joystick hat values
                     if self.joystick.get_hat(i)[1] > 0:
                         self.joystick_hats[DPAD_UP + (4 * i)] = True
