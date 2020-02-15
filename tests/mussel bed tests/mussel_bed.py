@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 
+# 50cm x 50cm pleixiglass plus 15 mm on every side
+
 # stores points for perspective transform
 refPt = []
 
