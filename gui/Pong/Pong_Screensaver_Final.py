@@ -15,8 +15,8 @@ class Ball(pygame.Rect):
 
     def move_ball(self):
         #Ball Speed Cap
-        if self.vel_mod > 2:
-            self.vel_mod = 2
+        if self.vel_mod > 3:
+            self.vel_mod = 3
             
         self.x += self.velocity * self.vel_mod
         self.y += self.angle
@@ -57,7 +57,7 @@ class Paddle(pygame.Rect):
 
     def move_paddle_AI(self, board_height, ball_y_cord, ball_x_cord, paddle_height, screen_width, random_error):
         #Random Error Generation
-        offset = paddle_height
+        offset = (paddle_height * (random.random() + 1))
         if random_error == 1:
             #Sets Center of Paddle
             center_y = self.y + (paddle_height / 2)
@@ -132,14 +132,14 @@ class Pong:
 
     #Fonts
     FONT_SIZE = 75
-    FONT_TYPE = 'freesansbold.ttf'
+    FONT_TYPE = '../unispace/unispace.ttf'
 
     #Centerline
     CENTERLINE_WIDTH = 2
 
     #Random Error
     RANDOM_ERROR = 0
-    RANDOM_ERROR_PROBABILITY = 4
+    RANDOM_ERROR_PROBABILITY = 8
     
     def __init__(self):
         #Initialize Pygame
