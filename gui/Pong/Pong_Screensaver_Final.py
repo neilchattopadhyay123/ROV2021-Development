@@ -15,8 +15,8 @@ class Ball(pygame.Rect):
 
     def move_ball(self):
         #Ball Speed Cap
-        if self.vel_mod > 3:
-            self.vel_mod = 3
+        if self.vel_mod > 2:
+            self.vel_mod = 2
             
         self.x += self.velocity * self.vel_mod
         self.y += self.angle
@@ -57,7 +57,7 @@ class Paddle(pygame.Rect):
 
     def move_paddle_AI(self, board_height, ball_y_cord, ball_x_cord, paddle_height, screen_width, random_error):
         #Random Error Generation
-        offset = (paddle_height * (random.random() + 1))
+        offset = ((paddle_height/2) * (random.random() + 1))
         if random_error == 1:
             #Sets Center of Paddle
             center_y = self.y + (paddle_height / 2)
@@ -133,6 +133,7 @@ class Pong:
     #Fonts
     FONT_SIZE = 75
     FONT_TYPE = '../unispace/unispace.ttf'
+    COUNTOFFSET = 1
 
     #Centerline
     CENTERLINE_WIDTH = 2
@@ -193,6 +194,8 @@ class Pong:
             #Ball Hits Left Edge Add Point
             if ball.x > self.SCREEN_WIDTH:
                 self.LEFTPOINTS = self.LEFTPOINTS + 1
+                if self.LEFTPOINTS >= 10:
+                    self.COUNTOFFSET = 2
                 ball.reset_ball(self.SCREEN_WIDTH / 2 - self.BALL_WIDTH / 2, self.SCREEN_HEIGHT / 2 - self.BALL_WIDTH / 2)
                 print("Left = " + str(self.LEFTPOINTS))
                 ball.vel_mod = 1
@@ -209,7 +212,7 @@ class Pong:
         RIGHTTEXTDISPLAY = RIGHTTEXT.render(str(self.RIGHTPOINTS), False, self.COLOR)
 
         #Reders Text
-        self.screen.blit(LEFTTEXTDISPLAY,(self.SCREEN_WIDTH/2 - self.FONT_SIZE,0))
+        self.screen.blit(LEFTTEXTDISPLAY,(self.SCREEN_WIDTH/2 - (self.FONT_SIZE * self.COUNTOFFSET),0))
         self.screen.blit(RIGHTTEXTDISPLAY,(self.SCREEN_WIDTH/2 + self.FONT_SIZE/2, 0))
 
 
