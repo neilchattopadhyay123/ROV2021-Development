@@ -1,19 +1,22 @@
 import cv2
 import numpy as np
 
-# 50cm x 50cm pleixiglass plus 15 mm on every side
-
 # stores points for perspective transform
 refPt = []
 
 # Read image.
-img = cv2.imread('/home/neil/Pictures/small_circles.jpg', cv2.IMREAD_GRAY)
-img = cv2.cvtColor(img, cv2.COLOR_BGR2BGRA)
+img = cv2.imread('/home/neil/Downloads/musselbed.jpg', cv2.IMREAD_COLOR)
 
 # stores the original images to remove the circles that are drawn
 original_img = img.copy()
 
-def four_point_transform(image, pts):
+
+# finds distance between two points
+def dist(x, y):
+    return np.sqrt(np.sum((x - y) ** 2))
+
+
+def four_point_transform(input_image, pts):
     # obtain a consistent order of the points and unpack them
     # individually
     (tl, tr, br, bl) = pts
@@ -44,7 +47,7 @@ def four_point_transform(image, pts):
         [0, maxHeight - 1]], dtype="float32")
     # compute the perspective transform matrix and then apply it
     matrix = cv2.getPerspectiveTransform(pts, dst)
-    warped = cv2.warpPerspective(image, matrix, (maxWidth, maxHeight))
+    warped = cv2.warpPerspective(input_image, matrix, (maxWidth, maxHeight))
 
     # return the warped image
     return warped
@@ -73,40 +76,61 @@ while True:
 # stores the perspective transform's result
 result = four_point_transform(original_img, np.array(refPt, dtype='float32'))
 
-# Convert to grayscale.
-gray = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY)
-
-# Blur using 3 * 3 kernel.
-gray_blurred = cv2.blur(gray, (3, 3))
-
-# Apply Hough transform on the blurred image.
-detected_circles = cv2.HoughCircles(gray_blurred,
-                                    cv2.HOUGH_GRADIENT, 1, 20, param1=250,
-                                    param2=17, minRadius=1, maxRadius=40)
-
-# Draw circles that are detected.
-if detected_circles is not None:
-
-    # Convert the circle parameters a, b and r to integers.
-    # a is x coordinate of center b is y coordinate of center and r is radius
-    detected_circles = np.uint16(np.around(detected_circles))
-
-    # prints the number of circles found
-    print('Found ' + str(detected_circles.shape[1]) + ' circles.')
-
-    # iterates though the circle parameters
-    for pt in detected_circles[0, :]:
-        a, b, r = pt[0], pt[1], pt[2]
-
-        # Draw the circumference of the circle.
-        cv2.circle(result, (a, b), r, (0, 255, 0), 2)
-
-        # Draw a small circle (of radius 1) to show the center.
-        cv2.circle(result, (a, b), 1, (0, 0, 255), 3)
-
+bilateral_filtered_image = cv2.bilateralFilter(result, 5, 175, 175)
 while True:
-    cv2.imshow('output', result)
-
-    # allows for user to stop showing the image by pressing ESC
+    cv2.imshow('Bilateral', bilateral_filtered_image)
     if cv2.waitKey(20) & 0xFF == 27:
         break
+
+edge_detected_image = cv2.Canny(bilateral_filtered_image, 75, 200)
+while True:
+    cv2.imshow('Edge', edge_detected_image)
+    if cv2.waitKey(20) & 0xFF == 27:
+        break
+
+contours, hierarchy = cv2.findContours(edge_detected_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+contour_list = []
+for contour in contours:
+    if len(contour) > 10:
+        contour_list.append(contour)
+
+cv2.drawContours(result, contour_list, -1, (255, 0, 0), 2)
+while True:
+    cv2.imshow('Objects Detected', result)
+    if cv2.waitKey(20) & 0xFF == 27:
+        break
+
+num_arcs = 1
+
+for i in range(1, len(contour_list)):
+    if dist(np.float32(contour_list[i][0][0]), np.float32(contour_list[i - 1][0][0])) > 12 and dist(
+            np.float32(contour_list[i][1][0]), np.float32(contour_list[i - 1][1][0])) > 12:
+        num_arcs += 1
+
+font = cv2.FONT_HERSHEY_SIMPLEX
+
+# org
+org = (50, 50)
+
+# fontScale
+fontScale = 1
+
+# Blue color in BGR
+color = (0, 255, 0)
+
+# Line thickness of 2 px
+thickness = 2
+
+# Using cv2.putText() method
+image = cv2.putText(result, str(num_arcs), org, font,
+                    fontScale, color, thickness, cv2.LINE_AA)
+
+#
+while True:
+    cv2.imshow('print count', image)
+    if cv2.waitKey(20) & 0xFF == 27:
+        break
+
+
+print(num_arcs)
