@@ -1,4 +1,5 @@
 # testing code for pressure sensor
+# make sure you do pip install smbus to use pressure sensor
 import ms5837
 import time
 
