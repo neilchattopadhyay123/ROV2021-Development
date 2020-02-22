@@ -1,6 +1,7 @@
 import pickle
 import struct
 import socket
+import pygame
 from threading import Thread
 from constants import *
 from client_utils import *
@@ -14,7 +15,7 @@ class ClientThread:
         if joystick != None:
             self.joystick_buttons = [False] * self.joystick.get_numbuttons()
             self.joystick_axes = [0.0] * self.joystick.get_numaxes()
-            self.joystick_hats = [False] * (self.joystick.get_numhats() * 4) # 0 = TOP, 1 = RIGHT, 2 = DOWN, 3 = LEFT
+            self.joystick_hats = [False] * self.joystick.get_numhats()
         else:
             self.joystick_buttons = []
             self.joystick_axes = []
@@ -69,18 +70,23 @@ class ClientThread:
                     self.joystick_hats[DPAD_UP + (4 * i)] = True
                 else:
                     self.joystick_hats[DPAD_UP + (4 * i)] = False
+                    
                 if self.joystick.get_hat(i)[0] > 0:
                     self.joystick_hats[DPAD_RIGHT + (4 * i)] = True
                 else:
                     self.joystick_hats[DPAD_RIGHT + (4 * i)] = False
+                    
                 if self.joystick.get_hat(i)[1] < 0:
                     self.joystick_hats[DPAD_DOWN + (4 * i)] = True
                 else:
                     self.joystick_hats[DPAD_DOWN + (4 * i)] = False
+                    
                 if self.joystick.get_hat(i)[0] < 0:
                     self.joystick_hats[DPAD_LEFT + (4 * i)] = True
                 else:
                     self.joystick_hats[DPAD_LEFT + (4 * i)] = False
+            
+            time.sleep(0.01)
 
     def push_command (self, command):
         ''' Send a command to the client '''
