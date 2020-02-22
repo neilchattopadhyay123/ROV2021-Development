@@ -37,6 +37,8 @@ def main ():
         # Recieve data
         recv_data = recv(s)
 
+        # print(recv_data[1])
+
         # Check if a command was sent
         if recv_data[DATA_IDX_COMMAND] == COMMAND_QUIT:
             PRINT('Recieved command ' + ENC_VALUE(COMMAND_QUIT) + '.', INFO)

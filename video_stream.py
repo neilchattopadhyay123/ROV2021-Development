@@ -24,13 +24,11 @@ class VideoStream:
         self.frame = None
         self.running = False
 
-        '''
         self.t0 = time.time()
         self.tt = self.t0;
         self.i = 0
         self.it = 0
         self.fps_list = []
-        '''
 
         time.sleep(2)
 
@@ -58,7 +56,6 @@ class VideoStream:
             
             self._rawCapture.truncate(0)
 
-            '''
             self.t = time.time()
             if self.t - self.t0 >= 1:
                 self.fps_list += [self.i]
@@ -67,7 +64,8 @@ class VideoStream:
 
                 self.t0 = self.t
                 self.i = 0
-            '''
+
+            time.sleep(0.02)
             
     def read(self):
         ''' Get the last frame the camera has read '''
