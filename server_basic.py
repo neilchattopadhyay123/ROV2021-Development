@@ -39,7 +39,9 @@ def handle_connection (connection, address):
         connection.close()
         PI_CLIENT = None
         PI_CLIENT_CONNECTED = False
-    except Exception as e:
+        
+    except Exception as e: # Prints Error
+        
         PRINT('Could not run client for ' + ENC_VALUE(address[0]) + '.', ERROR)
         PRINT('| ' + str(e), ERROR)
         
@@ -58,7 +60,9 @@ def connection_listener ():
         SERVER_SOCKET.bind(('', PORT))
         
         PRINT('Socket bound to port ' + ENC_VALUE(PORT) + '.', SUCCESS)
-    except socket.error as err:
+        
+    except socket.error as err: # Prints Error
+        
         PRINT('Socket failed to bind to port ' + ENC_VALUE(PORT) + '.', ERROR)
         PRINT('| ' + err, ERROR)
 
@@ -80,7 +84,7 @@ def connection_listener ():
         except:
             pass
 
-    SERVER_SOCKET.close()
+    SERVER_SOCKET.close() # Closes server socket
     
     PRINT('Socket closed.', SUCCESS)
 
@@ -95,12 +99,13 @@ def main ():
     connection_handler = Thread(target=connection_listener, args=())
     connection_handler.start()
 
-    while RUNNING:
+    while RUNNING: # Main loop
         if PI_CLIENT_CONNECTED:
             try:
                 # Get the video frame from the client and decode it
                 frame = cv2.imdecode(PI_CLIENT.recv_data[DATA_IDX_VIDEO], cv2.IMREAD_COLOR)
 
+                # Display camera feed on 'frame'
                 cv2.imshow('frame', frame)
 
                 # If the 'q' key is pressed, shut down the server
@@ -111,8 +116,8 @@ def main ():
             except:
                 pass
 
-    cv2.destroyAllWindows()
-    connection_handler.join()
+    cv2.destroyAllWindows() # Closes all cv2 widows
+    connection_handler.join() # Ends connection
 
     PRINT('Quit.', SUCCESS)
 

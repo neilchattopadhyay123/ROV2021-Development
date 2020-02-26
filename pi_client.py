@@ -12,6 +12,8 @@ from client_utils import *
 RUNNING = True # Whether the client is running
 
 def main ():
+    ''' Main method '''
+    
     global RUNNING
 
     # Create a socket and connect to the server
@@ -31,7 +33,8 @@ def main ():
 
             # Send data
             send(s, [frame])
-        except Exception as e:
+            
+        except Exception as e: # Prints Error
             PRINT(str(e), ERROR)
 
         # Recieve data
@@ -40,13 +43,13 @@ def main ():
         # print(recv_data[1])
 
         # Check if a command was sent
-        if recv_data[DATA_IDX_COMMAND] == COMMAND_QUIT:
+        if recv_data[DATA_IDX_COMMAND] == COMMAND_QUIT: # If quit command was recieved RUNNING = false
             PRINT('Recieved command ' + ENC_VALUE(COMMAND_QUIT) + '.', INFO)
             
             RUNNING = False
 
-    s.close()
-    stream.stop()
+    s.close() # Closes socket
+    stream.stop() # Stops stream
 
     PRINT('Quit.', SUCCESS)
 

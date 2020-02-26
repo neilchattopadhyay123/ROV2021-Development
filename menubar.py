@@ -9,7 +9,7 @@ class MenuBar:
         self.font = font # The pygame font
         
         self.rect = pygame.Rect(0, 0, MENUBAR_HEIGHT, MENUBAR_HEIGHT) # The actual menubar rectangle
-        self.vertical_offset = vertical_offset
+        self.vertical_offset = vertical_offset 
 
         self.apps = [] # List of all apps on the menubar
         
@@ -20,14 +20,14 @@ class MenuBar:
 
     def update (self, mouse_data, key_data):
         # Update all the apps on the menubar
-        if not self.is_hidden:
-            if key_data[KEYBIND_MENUBAR_DISABLE[1]]:
+        if not self.is_hidden: # If the menubar is not hidden, update apps
+            if key_data[KEYBIND_MENUBAR_DISABLE[1]]: # Toggles between hidden and shown
                 menubar.toggle_hidden()
             
-            for i in range(len(self.apps)):
+            for i in range(len(self.apps)): # Updates apps on menubar
                 self.apps[i].update(mouse_data, key_data)
 
-                if key_data[KEYBIND_MENUBAR_SHORTCUTS[i][1]]:
+                if key_data[KEYBIND_MENUBAR_SHORTCUTS[i][1]]: # Checks if app shortcut was pressed
                     self.apps[i].run()
         
     def draw (self):
@@ -75,13 +75,14 @@ class MenuBar:
 
             self.apps[i].set_pos((x, y))
 
-    def toggle_hidden (self):
+    def toggle_hidden (self): # Switches is_hidden boolean variable when called
         self.is_hidden = not self.is_hidden
         
-    def add_app (self, app):
+    def add_app (self, app): # Appends new app to menubar and auto resizes
         if len(self.apps) < MENUBAR_APP_COUNT:
             self.apps.append(app)
 
             self.resize()
+            
         else:
             PRINT('Cannot add app ' + ENC_VALUE(app.name) + ' to MenuBar! (len=' + str(MENUBAR_APP_COUNT), ERROR)
