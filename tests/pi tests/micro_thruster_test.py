@@ -3,7 +3,7 @@ import subprocess
 import time
 import pygame
 
-THRUSTER_ID = 0
+THRUSTER_ID = 18
 THRUSTER_AXIS = 1
 
 FREQ = 100
@@ -29,12 +29,14 @@ def setup ():
         for joystick in JOYSTICKS:
             joystick.init()
     
-    subprocess.call('sudo pigpio', shell=True)
+    subprocess.call('sudo pigpiod', shell=True)
     time.sleep(0.5)
 
     GPIO = pigpio.pi()
     if not GPIO.connected:
         print('Could not connect to ESC.')
+
+        GPIO = None
     else:
         print('Connected to ESC.')
 
@@ -45,7 +47,7 @@ def setup ():
 
         GPIO.set_PWM_frequency(THRUSTER_ID, FREQ)
 
-        print('Thruster PWM frequency is ' + str(GPIO.get_PWM_FREQUENCY(THRUSTER_ID)))
+        print('Thruster PWM frequency is ' + str(GPIO.get_PWM_frequency(THRUSTER_ID)))
 
 def main ():
     global THRUSTER_ID
@@ -71,11 +73,13 @@ def main ():
 
         pwm_value = int((MIDDLE + (-JOYSTICKS[0].get_axis(THRUSTER_AXIS) * RANGE)) / FREQ)
         print(pwm_value)
-        
-        GPIO.set_PWM_dutycycle(THRUSTER_ID, pwm_value)
 
-    GPIO.set_PWM_dutycycle(THRUSTER_ID, 0)
-    GPIO.stop()
+        if not GPIO == None:
+            GPIO.set_PWM_dutycycle(THRUSTER_ID, pwm_value)
+
+    if not GPIO == None:  
+        GPIO.set_PWM_dutycycle(THRUSTER_ID, 0)
+        GPIO.stop()
 
 if __name__ == '__main__':
     main()
