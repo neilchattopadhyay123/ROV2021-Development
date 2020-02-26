@@ -30,14 +30,14 @@ class VideoStream:
         self.it = 0
         self.fps_list = []
 
-        time.sleep(2)
+        time.sleep(2) # Delay
 
     def start(self):
         ''' Begin reading the camera frames '''
         
-        self.running = True
+        self.running = True # Sets main boolean to True
         
-        self.thread.start()
+        self.thread.start()# Starts thread
 
         PRINT('Started video stream.', SUCCESS)
         
@@ -45,7 +45,8 @@ class VideoStream:
 
     def update(self):
         ''' The main thread loop for getting the current camera images '''
-        
+
+        # Main loop
         while self.running:
             self.i += 1
             self.it += 1
@@ -53,10 +54,13 @@ class VideoStream:
             # Get a picture from the camera and save it to a variable which can be accessed outside of the class
             self.camera.capture(self._rawCapture, format="bgr", use_video_port=True)
             self.frame = self._rawCapture.array
-            
+
+            # Clears stream for next frame
             self._rawCapture.truncate(0)
 
+            # Updates t
             self.t = time.time()
+            
             if self.t - self.t0 >= 1:
                 self.fps_list += [self.i]
                 
@@ -65,7 +69,7 @@ class VideoStream:
                 self.t0 = self.t
                 self.i = 0
 
-            time.sleep(0.02)
+            time.sleep(0.02) # Delay
             
     def read(self):
         ''' Get the last frame the camera has read '''
@@ -75,9 +79,9 @@ class VideoStream:
     def stop(self):
         ''' Stop capturing frames and stop running the thread '''
         
-        self.running = False
+        self.running = False # Sets main boolean to False
         
-        self.thread.join()
-        self.camera.close()
+        self.thread.join() # Ends thread
+        self.camera.close() # Closes camera connection
 
         PRINT('Closed video stream.', SUCCESS)

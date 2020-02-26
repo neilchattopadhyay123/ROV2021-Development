@@ -13,6 +13,7 @@ def recv (connection):
         while len(data) < PAYLOAD_SIZE:
             data += connection.recv(PACKET_SIZE)
 
+        # Unpacks data recieved
         packed_size = data[:PAYLOAD_SIZE]
         data = data[PAYLOAD_SIZE:]
         size = struct.unpack('>L', packed_size)[0]
@@ -24,10 +25,13 @@ def recv (connection):
         data = data[size:]
 
         return pickle.loads(loaded_data, fix_imports=True, encoding='bytes')
+    
     except Exception as e:
+        # Print error if thrown
         PRINT('Could not receive data.', ERROR)
         PRINT('| ' + str(e), ERROR)
 
+    # Return '[]' if error is thrown
     return []
             
 def send (connection, send_data):
@@ -39,6 +43,8 @@ def send (connection, send_data):
 
         # Send the data to the client
         connection.sendall(struct.pack('>L', len(data)) + data)
+        
     except Exception as e:
+        # Print error if thrown
         PRINT('Could not send data.', ERROR)
         PRINT('| ' + str(e), ERROR)
