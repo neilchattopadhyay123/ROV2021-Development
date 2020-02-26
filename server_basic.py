@@ -3,15 +3,15 @@ import pickle
 import struct
 import cv2
 
-from threading import Thread
+from threading import Thread # Imports Thread
 from constants import * # Import all constants and functions in constants.py
-from client_thread import ClientThread
+from client_thread import ClientThread # Imports ClientThread
 
 SERVER_SOCKET = None # The server socket object
 PI_CLIENT = None # The client connection object
 PI_CLIENT_CONNECTED = False # Whether the client is connected or not
 
-RUNNING = True # Whether the server is running
+RUNNING = True # Whether the server is running, Main Boolean
 
 def handle_connection (connection, address):
     ''' Handle clients trying to connect to the server '''
@@ -30,13 +30,13 @@ def handle_connection (connection, address):
         
         # Create a thread for the client's run method (to send and recieve data)
         client_thread = Thread(target=PI_CLIENT.run, args=(connection, address))
-        client_thread.start()
+        client_thread.start() # Starts client_thread
         client_thread.join() # Wait for the client to disconnect
 
         PRINT('Disconnected from ' + ENC_VALUE(address[0]) + '.', INFO)
 
         # Reset client variables
-        connection.close()
+        connection.close() # Ends connection
         PI_CLIENT = None
         PI_CLIENT_CONNECTED = False
         
@@ -75,12 +75,13 @@ def connection_listener ():
         try:
             # If a client connects, get the connection object and the address
             conn, address = SERVER_SOCKET.accept()
-            conn.settimeout(TIMEOUT)
+            conn.settimeout(TIMEOUT) # Timeout for connection
 
             # Start a connection handler thread to begin reading and writing data
             connection_thread = Thread(target=handle_connection, args=(conn, address))
-            connection_thread.start()
+            connection_thread.start() # Starts connection_thread
             connection_thread.join() # Wait for the connection to disconnect
+            
         except:
             pass
 
@@ -97,7 +98,7 @@ def main ():
 
     # Create thread for the connection handler loop
     connection_handler = Thread(target=connection_listener, args=())
-    connection_handler.start()
+    connection_handler.start() # Start connection_handler thread
 
     while RUNNING: # Main loop
         if PI_CLIENT_CONNECTED:
@@ -110,9 +111,9 @@ def main ():
 
                 # If the 'q' key is pressed, shut down the server
                 if cv2.waitKey(1) & 0xFF == ord('q'):
-                    PI_CLIENT.push_command(COMMAND_QUIT)
+                    PI_CLIENT.push_command(COMMAND_QUIT) # Sends quit command
                     
-                    RUNNING = False
+                    RUNNING = False # Sets main boolean to false, ending Main loop
             except:
                 pass
 
