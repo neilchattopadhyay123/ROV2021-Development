@@ -33,10 +33,10 @@ IS_RUNNING = True # Whether the server is IS_RUNNING
 
 def handle_connection (connection, address, joysticks):
     ''' Handle clients trying to connect to the server '''
-    
+
     global PI_CLIENT
     global PI_CLIENT_CONNECTED
-    
+
     PRINT('Handling connection from ' + ENC_VALUE(address[0]) + '...', INFO)
 
     # Create a new client thread for the incoming client
@@ -45,7 +45,7 @@ def handle_connection (connection, address, joysticks):
 
     try:
         PRINT('Starting client thread for ' + ENC_VALUE(address[0]) + '...', INFO)
-        
+
         # Create a thread for the client's run method (to send and recieve data)
         client_thread = Thread(target=PI_CLIENT.run, args=(connection, address))
         client_thread.start()
@@ -60,21 +60,21 @@ def handle_connection (connection, address, joysticks):
     except Exception as e:
         PRINT('Could not run client for ' + ENC_VALUE(address[0]) + '.', ERROR)
         PRINT('| ' + str(e), ERROR)
-        
+
 def connection_listener (joysticks):
     ''' Listens for incoming clients that want to connect to the server '''
-    
+
     global IS_RUNNING
     global SERVER_SOCKET
 
     # Create socket object
     SERVER_SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     SERVER_SOCKET.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    
+
     try:
         # Bind socket to a specific port
         SERVER_SOCKET.bind(('', PORT))
-        
+
         PRINT('Socket bound to port ' + ENC_VALUE(PORT) + '.', SUCCESS)
     except socket.error as err:
         PRINT('Socket failed to bind to port ' + ENC_VALUE(PORT) + '.', ERROR)
@@ -97,7 +97,7 @@ def connection_listener (joysticks):
             connection_thread.join() # Wait for the connection to disconnect
         except:
             pass
-    
+
     PRINT('Socket closed.', SUCCESS)
 
 def shutdown ():
@@ -110,12 +110,12 @@ def shutdown ():
         PI_CLIENT.push_command(COMMAND_QUIT)
 
     SERVER_SOCKET.close()
-                    
+
     IS_RUNNING = False
 
 def main ():
     ''' The main method :o '''
-    
+
     global PI_CLIENT
     global PI_CLIENT_CONNECTED
     global IS_RUNNING
@@ -128,7 +128,7 @@ def main ():
         for joystick in joysticks:
             joystick.init()
             PRINT('| ' + ENC_VALUE(joystick.get_id()) + ' ' + ENC_VALUE(joystick.get_name()), INFO)
-    
+
     screen = pygame.display.set_mode(SCREEN_DIMENSION, pygame.RESIZABLE)
     screen.set_alpha(None)
     pygame.display.set_caption('LoggerheadROV Driver Station | ' + random.choice(QUOTES))
@@ -186,12 +186,12 @@ def main ():
                 # cv2.imshow('frame', frame)
             except:
                 pass
-        
+
         menubar.update(mouse_data, key_data)
         # horizon.update(screen, mouse_pos[0] - (screen.get_size()[0] / 2), mouse_pos[1] - (screen.get_size()[1] / 2)) # Draws gauge too
 
         menubar.draw()
-        draw_text(screen, FONT, str(round(clock.get_fps(), 3)) + ' FPS', (UI_SCREEN_PADDING, UI_SCREEN_PADDING), False)
+        draw_text(screen, FONT, str(round(clock.get_fps(), 3)) + ' FPS', (screen.get_size()[0] - (UI_SCREEN_PADDING * 8), UI_SCREEN_PADDING), False)
 
         pygame.display.update()
         clock.tick(FPS)

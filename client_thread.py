@@ -10,20 +10,20 @@ class ClientThread:
     def __init__ (self, joystick):
         ''' Constructor '''
 
-        
+
         self.joystick_thread = Thread(target=self.read_joystick, args=()) #Creates joystick thread object
         self.joystick = joystick #Initailizes Joystick
-        
+
         if joystick != None: #If joystick exists initailizes axes, button, hats
             self.joystick_buttons = [False] * self.joystick.get_numbuttons()
             self.joystick_axes = [0.0] * self.joystick.get_numaxes()
             self.joystick_hats = [False] * self.joystick.get_numhats()
-            
-        else: # If joystick does not exist declare axes, buttons and hats 
+
+        else: # If joystick does not exist declare axes, buttons and hats
             self.joystick_buttons = []
             self.joystick_axes = []
             self.joystick_hats = []
-        
+
         self.recv_data = [] # The data recieved
         self.command = '' # The command that is going to be sent to the client
 
@@ -44,11 +44,11 @@ class ClientThread:
             self.joystick_thread.start()
 
         PRINT('Started client thread for ' + ENC_VALUE(self.address[0]) + '.', SUCCESS)
-        
+
         while self.running:
             # Recieve data
             self.recv_data = recv(self.connection)
-                
+
             # Send data
             send(self.connection, [self.command, [self.joystick_buttons, self.joystick_axes, self.joystick_hats]])
 
@@ -58,50 +58,50 @@ class ClientThread:
 
             # Reset the command so it doesn't send the same thing multiple times
             self.command = ''
-        
+
         self.connection.close() # Close the connection if the thread ends
         self.joystick_thread.join() # Ends joystick_thread
 
         PRINT('Stopped client thread for ' + ENC_VALUE(self.address[0]) + '.', SUCCESS)
 
-     
+
     def read_joystick (self):
         ''' Read joystick axes and buttons '''
 
         while self.running:
             for i in range(self.joystick.get_numbuttons()): # Update joystick button values
                 self.joystick_buttons[i] = bool(self.joystick.get_button(i))
-                
+
             for i in range(self.joystick.get_numaxes()): # Update joystick axis values
                 self.joystick_axes[i] = self.joystick.get_axis(i)
-                
+
             for i in range(self.joystick.get_numhats()):  # Update joystick hat values
                 if self.joystick.get_hat(i)[1] > 0:
                     self.joystick_hats[DPAD_UP + (4 * i)] = True
                 else:
                     self.joystick_hats[DPAD_UP + (4 * i)] = False
-                    
+
                 if self.joystick.get_hat(i)[0] > 0:
                     self.joystick_hats[DPAD_RIGHT + (4 * i)] = True
                 else:
                     self.joystick_hats[DPAD_RIGHT + (4 * i)] = False
-                    
+
                 if self.joystick.get_hat(i)[1] < 0:
                     self.joystick_hats[DPAD_DOWN + (4 * i)] = True
                 else:
                     self.joystick_hats[DPAD_DOWN + (4 * i)] = False
-                    
+
                 if self.joystick.get_hat(i)[0] < 0:
                     self.joystick_hats[DPAD_LEFT + (4 * i)] = True
                 else:
                     self.joystick_hats[DPAD_LEFT + (4 * i)] = False
-            
+
             time.sleep(0.01) # Delay for controller data
 
     def push_command (self, command):
-      ''' Send a command to the client '''
+        ''' Send a command to the client '''
 
         # Sets command
         self.command = command
-        
+
         PRINT('Sending command ' + ENC_VALUE(self.command) + ' to ' + ENC_VALUE(self.address[0]) + '...', INFO)
