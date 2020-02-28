@@ -7,16 +7,29 @@ import math
 RUNNING = True
 
 #Thrusters IDs
-I2C_THRUST_1 = 1
-I2C_THRUST_2 = 2
-I2C_THRUST_3 = 3
-I2C_THRUST_4 = 4
-I2C_THRUST_5 = 5
+I2C_THRUST_1 = 1 #Vertical
+I2C_THRUST_2 = 2 #Horizontal
+I2C_THRUST_3 = 3 #Vertical
+I2C_THRUST_4 = 4 #Horizontal
+I2C_THRUST_5 = 5 #Vertical
+
+# -1 = Reversed thruster direction, 1 = Normal thruster direction
+THRUST_1_ALT = 1       #Front Right
+THRUST_2_ALT = 1       #Front Left
+THRUST_3_ALT = 1        #Back Right
+THRUST_4_ALT = 1        #Back Left
+THRUST_5_ALT = 1       #Middle Right
+
+
+THRUSTER_AXIS_MOVE = 1
+JOYSTICKS = []
+JOYSTICK_AXIS_TURN = 0
+JOYSTICK_AXIS_VERT = 3
 
 PWM = None # Adafruit PWM board object
 
-FREQ = 120 # PWM frequency being sent to the esc/servos
-ADJUST_25MHZ = 0.996 # Correction factor for 25MHz oscillator tolerance (each PCA9685 board may be different!)
+FREQ = 200 # PWM frequency being sent to the esc/servos
+ADJUST_25MHZ = 1.0247 # Correction factor for 25MHz oscillator tolerance (each PCA9685 board may be different!)
 
 ESC_MAX_PW = 1900 # ESC pulsewidth ranges
 ESC_MIDDLE_PW = 1500
@@ -33,6 +46,16 @@ PWM_TIMER_COUNT = (1 / (25000000.0 * ADJUST_25MHZ)) * PRESCALE * 1000000.0 # Thi
 def setup():
     global PWM
     global FREQ
+    global JOYSTICKS
+
+    pygame.init()
+
+    JOYSTICKS = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+    print('Found joystick.')
+
+    if len(JOYSTICKS) > 0:
+        for joystick in JOYSTICKS:
+            joystick.init()
     
     try:
         PWM = Adafruit_PCA9685.PCA9685()
@@ -62,15 +85,27 @@ def set_pwm_value (channel, VAL, max_pw, min_pw, middle_pw):
 
     PWM.set_pwm(channel, 0, int(pw / PWM_TIMER_COUNT))
 
+    return pw
+
 setup()
-PWM.set_all_pwm(0, 0)
-time.sleep(2)
+set_pwm_value(0, 0, ESC_MAX_PW, ESC_MIN_PW, ESC_MIDDLE_PW)
+set_pwm_value(1, 0, ESC_MAX_PW, ESC_MIN_PW, ESC_MIDDLE_PW)
+
+time.sleep(5)
 startTime = time.time()
 
 while RUNNING:
-    if time.time() - startTime >= 5:
-        RUNNING = False
-    set_pwm_value(I2C_THRUST_1, 0.5, ESC_MAX_PW, ESC_MIN_PW, ESC_MIDDLE_PW)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            RUNNING = False
+
+        if event.type == pygame.JOYBUTTONDOWN:
+            if event.button == 1:
+                RUNNING = False
+
+    print(-JOYSTICKS[0].get_axis(THRUSTER_AXIS_MOVE))
+    #print(set_pwm_value(1, -JOYSTICKS[0].get_axis(THRUSTER_AXIS_MOVE), ESC_MAX_PW, ESC_MIN_PW, ESC_MIDDLE_PW))
+    #set_pwm_value(0, -JOYSTICKS[0].get_axis(THRUSTER_AXIS_MOVE), ESC_MAX_PW, ESC_MIN_PW, ESC_MIDDLE_PW)
     time.sleep(0.01)
     
 PWM.set_all_pwm(0, 0)
