@@ -1,3 +1,7 @@
+import sys
+
+sys.path.append('/home/pi/Desktop/ROV2020-Development/tests/gyro tests/gyro_sensor')
+
 from gyro_sensor import IMU
 from filter.madgwickahrs import MadgwickAHRS
 from filter.quaternion import Quaternion
