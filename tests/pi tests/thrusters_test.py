@@ -21,7 +21,7 @@ THRUST_4_ALT = 1        #Back Left
 THRUST_5_ALT = 1       #Middle Right
 
 
-THRUSTER_AXIS_MOVE = 1
+JOYSTICK_AXIS_MOVE = 1
 JOYSTICKS = []
 JOYSTICK_AXIS_TURN = 0
 JOYSTICK_AXIS_VERT = 3
@@ -71,25 +71,33 @@ def setup():
     except Exception as e:
         print('Could not set up I2C board : ' + str(e))
 
-def set_pwm_value (channel, VAL, max_pw, min_pw, middle_pw):
+def set_pwm_value (channel, VAL):
     '''Set the PWM VAL of an esc/servo'''
 
     global PWM
     global PWM_TIMER_COUNT
+    global ESC_MAX_PW
+    global ESC_MIN_PW
+    global ESC_MIDDLE_PW
 
-    pw_range = (abs(max_pw - middle_pw) + abs(min_pw - middle_pw)) / 2
-    pw = middle_pw + (VAL * pw_range)
+    pw_range = (abs(ESC_MAX_PW - ESC_MIDDLE_PW) + abs(ESC_MIN_PW - ESC_MIDDLE_PW)) / 2
+    pw = ESC_MIDDLE_PW + (VAL * pw_range)
 
-    pw = pw if pw <= max_pw else max_pw
-    pw = pw if pw >= min_pw else min_pw
+    pw = pw if pw <= ESC_MAX_PW else ESC_MAX_PW
+    pw = pw if pw >= ESC_MIN_PW else ESC_MIN_PW
 
     PWM.set_pwm(channel, 0, int(pw / PWM_TIMER_COUNT))
 
     return pw
 
 setup()
-set_pwm_value(0, 0, ESC_MAX_PW, ESC_MIN_PW, ESC_MIDDLE_PW)
-set_pwm_value(1, 0, ESC_MAX_PW, ESC_MIN_PW, ESC_MIDDLE_PW)
+
+# Initializing Thrusters
+set_pwm_value(I2C_THRUST_1, 0)
+set_pwm_value(I2C_THRUST_2, 0)
+set_pwm_value(I2C_THRUST_3, 0)
+set_pwm_value(I2C_THRUST_4, 0)
+set_pwm_value(I2C_THRUST_5, 0)
 
 time.sleep(5)
 startTime = time.time()
@@ -103,9 +111,34 @@ while RUNNING:
             if event.button == 1:
                 RUNNING = False
 
-    print(-JOYSTICKS[0].get_axis(THRUSTER_AXIS_MOVE))
-    #print(set_pwm_value(1, -JOYSTICKS[0].get_axis(THRUSTER_AXIS_MOVE), ESC_MAX_PW, ESC_MIN_PW, ESC_MIDDLE_PW))
-    #set_pwm_value(0, -JOYSTICKS[0].get_axis(THRUSTER_AXIS_MOVE), ESC_MAX_PW, ESC_MIN_PW, ESC_MIDDLE_PW)
+    
+    # Vertical Thruster Group
+    set_pwm_value(I2C_THRUST_1, -JOYSTICKS[0].get_axis(JOYSTICK_AXIS_VERT))
+    set_pwm_value(I2C_THRUST_3, -JOYSTICKS[0].get_axis(JOYSTICK_AXIS_VERT))
+    set_pwm_value(I2C_THRUST_5, -JOYSTICKS[0].get_axis(JOYSTICK_AXIS_VERT))
+                  
+
+    JOYSTICK_X = JOYSTICKS[0].get_axis(JOYSTICK_AXIS_TURN)
+    JOYSTICK_Y = -JOYSTICKS[0].get_axis(JOYSTICK_AXIS_MOVE)
+
+    X_2 = JOYSTICK_X
+    Y_2 = JOYSTICK_Y
+    X_4 = -JOYSTICK_X
+    Y_4 = JOYSTICK_Y
+
+    if JOYSTICK_X == 0 and JOYSTICK_Y != 0:
+        X_2 = 1
+        X_4 = 1
+        
+    elif JOYSTICK_X != 0 and JOYSTICK_Y == 0:
+        Y_2 = 1
+        Y_4 = 1
+
+    # Horizontal Thruster Group
+    set_pwm_value(I2C_THRUST_2, (X_2 * Y_2))
+    set_pwm_value(I2C_THRUST_4, (X_4 * Y_4))
+
+
     time.sleep(0.01)
     
 PWM.set_all_pwm(0, 0)
