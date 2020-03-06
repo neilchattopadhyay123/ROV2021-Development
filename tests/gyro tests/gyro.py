@@ -7,54 +7,53 @@ from filter.madgwickahrs import MadgwickAHRS
 from filter.quaternion import Quaternion
 import numpy as np
 import time
-import datetime
+from threading import Thread
 
-sample_period = 0
 
-IMU.detectIMU()
-IMU.initIMU()
+class Gyro(Thread):
+    period = 1 / 256
+    roll, pitch, yaw = 0, 0, 0
 
-filter = MadgwickAHRS()
+    def __init__(self, period=None):
+        super().__init__()
+        if period is not None:
+            self.period = period
 
-accelerometer_values = []
-gyro_values = []
+    def get_euler_angles(self):
+        return self.roll, self.pitch, self.yaw
 
-start_time = time.time()
+    def run(self):
+        IMU.detectIMU()
+        IMU.initIMU()
 
-for i in range(20000000):
+        filter = MadgwickAHRS(sample_period=self.period)
 
-    end_time = time.time()
+        accelerometer_values = [0, 0, 0]
+        gyro_values = [0, 0, 0]
 
-    ACCx = IMU.readACCx()
-    ACCy = IMU.readACCy()
-    ACCz = IMU.readACCz()
-    GYRx = IMU.readGYRx()
-    GYRy = IMU.readGYRy()
-    GYRz = IMU.readGYRz()
+        i = 0
 
-    accelerometer_values.append(IMU.readACCx())
-    accelerometer_values.append(IMU.readACCy())
-    accelerometer_values.append(IMU.readACCz())
+        start_time = 0
 
-    gyro_values.append(IMU.readGYRx())
-    gyro_values.append(IMU.readGYRy())
-    gyro_values.append(IMU.readGYRz())
+        while True:
+            if i != 0:
+                end_time = time.time()
+                time.sleep(self.period - (end_time - start_time))
 
-    if (i % 100) == 0:
-        print('gyro array:', gyro_values)
-        print('accelerometer_array', accelerometer_values)
+            accelerometer_values[0] = IMU.readACCx()
+            accelerometer_values[1] = IMU.readACCy()
+            accelerometer_values[2] = IMU.readACCz()
 
-    if i == 0:
-        start_time = time.time()
-        sample_period = start_time - end_time
+            gyro_values[0] = IMU.readGYRx()
+            gyro_values[1] = IMU.readGYRy()
+            gyro_values[2] = IMU.readGYRz()
 
-    filter.samplePeriod = sample_period
+            start_time = time.time()
 
-    filter.update_imu(gyro_values, accelerometer_values)
-    roll, pitch, yaw = filter.quaternion.to_euler_angles()
+            filter.update_imu(gyro_values, accelerometer_values)
+            self.roll, self.pitch, self.yaw = filter.quaternion.to_euler_angles()
 
-    if (i % 100) == 0:
-        print("roll: ", roll, "pitch: ", pitch, "yaw: ", yaw)
+            if i % 30 == 0:
+                print('roll: ', self.roll, 'pitch: ', self.pitch, 'yaw: ', self.yaw)
 
-    if i != 0:
-        start_time = time.time()
+            i += 1
