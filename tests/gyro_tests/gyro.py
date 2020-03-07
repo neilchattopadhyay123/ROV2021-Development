@@ -22,11 +22,20 @@ class Gyro(Thread):
     def get_euler_angles(self):
         return self.roll, self.pitch, self.yaw
 
+    def get_roll(self):
+        return self.roll
+
+    def get_pitch(self):
+        return self.pitch
+
+    def get_yaw(self):
+        return self.yaw
+
     def run(self):
         IMU.detectIMU()
         IMU.initIMU()
 
-        filter = MadgwickAHRS(sample_period=self.period)
+        filter = MadgwickAHRS(sampleperiod=self.period)
 
         accelerometer_values = [0, 0, 0]
         gyro_values = [0, 0, 0]
