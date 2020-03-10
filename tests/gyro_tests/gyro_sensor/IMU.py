@@ -1,7 +1,11 @@
 import smbus
-bus = smbus.SMBus(1)
-from LSM9DS0 import *
-from LSM9DS1 import *
+try:
+    bus = smbus.SMBus(1)
+except FileNotFoundError:
+    'hi'
+
+import LSM9DS0
+import LSM9DS1
 import time
 
 
