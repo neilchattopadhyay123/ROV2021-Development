@@ -3,7 +3,7 @@ import cv2
 import pygame
 
 # Socket info
-HOST = '192.168.2.1' # The server ip
+HOST = '10.0.0.2' # The server ip
 PORT = 6900 # The port to connect over
 TIMEOUT = 5 # The time without data being sent before the server disconnects from the client
 PAYLOAD_SIZE = struct.calcsize(">L")
@@ -19,9 +19,9 @@ DATA_IDX_VIDEO = 0
 COMMAND_QUIT = 'quit'
 
 # Camera info
-CAMERA_RES = (32*32, 16*32) # Resolution of the camera
+CAMERA_RES = (1024, 768) # Resolution of the camera
 CAMERA_MODE = 5 # Camera aspect ratio mode
-CAMERA_FPS = 30
+CAMERA_FPS = 60
 CAMERA_SHUTTER_SPEED = 1000
 CAMERA_BRIGHTNESS = 65
 CAMERA_AWB_MODE = 'incandescent'

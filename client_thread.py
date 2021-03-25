@@ -2,6 +2,7 @@ import pickle
 import struct
 import socket
 import pygame
+import time
 from threading import Thread
 from constants import *
 from client_utils import *

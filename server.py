@@ -140,7 +140,7 @@ def main ():
     menubar = MenuBar(screen, FONT)
     menubar.add_app(App("Do Thing", menubar))
     menubar.add_app(App("Do Other Thing", menubar))
-    folder = App("Folder That Holds More Things", menubar, is_folder=True)
+    folder = App("Image Recognition", menubar, is_folder=True)
     folder.add_app(App("More Things", folder.sub_app_menubar))
     menubar.add_app(folder)
 
@@ -176,7 +176,6 @@ def main ():
                 # Get the video frame from the client and decode it
                 frame = cv2.imdecode(PI_CLIENT.recv_data[DATA_IDX_VIDEO], cv2.IMREAD_COLOR)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                frame = np.rot90(frame)
                 frame = pygame.surfarray.make_surface(frame)
 
                 frame = pygame.transform.scale(frame, screen.get_size())
