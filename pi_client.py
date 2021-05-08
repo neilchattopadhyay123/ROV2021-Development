@@ -8,6 +8,8 @@ from constants import *
 from threading import Thread
 from video_stream import VideoStream
 from client_utils import *
+import ms5837
+import time
 
 RUNNING = True # Whether the client is running
 
@@ -15,6 +17,17 @@ def main ():
     ''' Main method '''
     
     global RUNNING
+    sensor = ms5837.MS5837_30BA()
+    # We must initialize the sensor before reading it
+    if not sensor.init():
+        print("Sensor could not be initialized")
+
+    # We have to read values from sensor to update pressure and temperature
+    if not sensor.read():
+        print("Sensor read failed!")
+
+    pressure = sensor.pressure(ms5837.UNITS_atm)
+    temperature = sensor.temperature(ms5837.UNITS_Centigrade)
 
     # Create a socket and connect to the server
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -32,6 +45,7 @@ def main ():
             _, frame = cv2.imencode('.jpg', stream_frame, ENCODE_PARAM)
 
             # Send data
+            send_pressure_and_temperature(s, pressure, temperature)
             send(s, [frame])
             
         except Exception as e: # Prints Error

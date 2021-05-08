@@ -25,6 +25,8 @@ class ClientThread:
             self.joystick_axes = []
             self.joystick_hats = []
 
+        self.pressure = 0.001
+        self.temperature = 0.001
         self.recv_data = [] # The data recieved
         self.command = '' # The command that is going to be sent to the client
 
@@ -48,6 +50,7 @@ class ClientThread:
 
         while self.running:
             # Recieve data
+            self.pressure, self.temperature = recv_pressure_and_temperature(self.connection)
             self.recv_data = recv(self.connection)
 
             # Send data

@@ -50,4 +50,3 @@ while True:
             sensor.temperature(ms5837.UNITS_Farenheit))  # Request Fahrenheit
     else:
         print("Sensor read failed!")
-        exit(1)

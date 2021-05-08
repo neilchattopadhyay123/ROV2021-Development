@@ -119,6 +119,8 @@ def main ():
     global PI_CLIENT
     global PI_CLIENT_CONNECTED
     global IS_RUNNING
+    global pressure_ATM
+    global temperature_C
 
     joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
     PRINT('Found ' + ENC_VALUE(len(joysticks)) + ' joysticks.', INFO)
@@ -191,6 +193,9 @@ def main ():
 
         menubar.draw()
         draw_text(screen, FONT, str(round(clock.get_fps(), 3)) + ' FPS', (screen.get_size()[0] - (UI_SCREEN_PADDING * 8), UI_SCREEN_PADDING), False)
+        if PI_CLIENT_CONNECTED:
+            draw_text(screen, FONT, str(PI_CLIENT.pressure) + ' atm', (screen.get_size()[0] - (UI_SCREEN_PADDING * 8), UI_SCREEN_PADDING + 30), False)
+            draw_text(screen, FONT, str(PI_CLIENT.temperature) + ' C', (screen.get_size()[0] - (UI_SCREEN_PADDING * 8), UI_SCREEN_PADDING + 60), False)
 
         pygame.display.update()
         clock.tick(FPS)
