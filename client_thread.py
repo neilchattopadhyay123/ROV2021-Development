@@ -50,8 +50,8 @@ class ClientThread:
 
         while self.running:
             # Recieve data
-            self.pressure, self.temperature = recv_pressure_and_temperature(self.connection)
-            self.recv_data = recv(self.connection)
+            # self.pressure, self.temperature = recv_pressure_and_temperature(self.connection)
+            # self.recv_data = recv(self.connection)
 
             # Send data
             send(self.connection, [self.command, [self.joystick_buttons, self.joystick_axes, self.joystick_hats]])

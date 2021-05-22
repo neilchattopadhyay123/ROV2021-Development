@@ -8,8 +8,11 @@ class VideoStream:
     def __init__(self):
         ''' Constructor '''
 
-        self.camera = PiCamera() # Create PiCamera object
-        self._rawCapture = PiRGBArray(self.camera, size=CAMERA_RES)
+        try:
+            self.camera = PiCamera() # Create PiCamera object
+            self._rawCapture = PiRGBArray(self.camera, size=CAMERA_RES)
+        except:
+            pass
 
         # Setup camera settings
         self.camera.resolution = CAMERA_RES # Set camera resolution
@@ -50,13 +53,16 @@ class VideoStream:
         while self.running:
             self.i += 1
             self.it += 1
-            
-            # Get a picture from the camera and save it to a variable which can be accessed outside of the class
-            self.camera.capture(self._rawCapture, format="bgr", use_video_port=True)
-            self.frame = self._rawCapture.array
 
-            # Clears stream for next frame
-            self._rawCapture.truncate(0)
+            try:
+                # Get a picture from the camera and save it to a variable which can be accessed outside of the class
+                self.camera.capture(self._rawCapture, format="bgr", use_video_port=True)
+                self.frame = self._rawCapture.array
+
+                # Clears stream for next frame
+                self._rawCapture.truncate(0)
+            except:
+                pass
 
             # Updates t
             self.t = time.time()

@@ -17,17 +17,17 @@ def main ():
     ''' Main method '''
     
     global RUNNING
-    sensor = ms5837.MS5837_30BA()
-    # We must initialize the sensor before reading it
-    if not sensor.init():
-        print("Sensor could not be initialized")
-
-    # We have to read values from sensor to update pressure and temperature
-    if not sensor.read():
-        print("Sensor read failed!")
-
-    pressure = sensor.pressure(ms5837.UNITS_atm)
-    temperature = sensor.temperature(ms5837.UNITS_Centigrade)
+    # sensor = ms5837.MS5837_30BA()
+    # # We must initialize the sensor before reading it
+    # if not sensor.init():
+    #     print("Sensor could not be initialized")
+    #
+    # # We have to read values from sensor to update pressure and temperature
+    # if not sensor.read():
+    #     print("Sensor read failed!")
+    #
+    # pressure = sensor.pressure(ms5837.UNITS_atm)
+    # temperature = sensor.temperature(ms5837.UNITS_Centigrade)
 
     # Create a socket and connect to the server
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

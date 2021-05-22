@@ -3,7 +3,7 @@ import cv2
 import pygame
 
 # Socket info
-HOST = '192.168.2.5' # The server ip
+HOST = '10.0.0.2' # The server ip
 PORT = 6900 # The port to connect over
 TIMEOUT = 5 # The time without data being sent before the server disconnects from the client
 PAYLOAD_SIZE = struct.calcsize(">L")
