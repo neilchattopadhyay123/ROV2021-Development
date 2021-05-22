@@ -11,13 +11,20 @@ class VideoStream:
         try:
             self.camera = PiCamera() # Create PiCamera object
             self._rawCapture = PiRGBArray(self.camera, size=CAMERA_RES)
+            # Setup camera settings
+            self.camera.resolution = CAMERA_RES  # Set camera resolution
+            self.camera.mode = CAMERA_MODE  # Set the aspect ratio of the camera
+            # self.camera.framerate = CAMERA_FPS # Set camera fps
+            # self.camera.shutter_speed = CAMERA_SHUTTER_SPEED # Set camera shutter speed
+            # self.camera.brightness = CAMERA_BRIGHTNESS # Set camera brightness
+            # self.camera.awb_mode = CAMERA_AWB_MODE # Set camera auto white balance
         except:
             pass
 
         # Setup camera settings
         self.camera.resolution = CAMERA_RES # Set camera resolution
-        # self.camera.mode = CAMERA_MODE # Set the aspect ratio of the camera
-        self.camera.framerate = CAMERA_FPS # Set camera fps
+        self.camera.mode = CAMERA_MODE # Set the aspect ratio of the camera
+        # self.camera.framerate = CAMERA_FPS # Set camera fps
         # self.camera.shutter_speed = CAMERA_SHUTTER_SPEED # Set camera shutter speed
         # self.camera.brightness = CAMERA_BRIGHTNESS # Set camera brightness
         # self.camera.awb_mode = CAMERA_AWB_MODE # Set camera auto white balance

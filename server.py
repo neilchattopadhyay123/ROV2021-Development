@@ -193,7 +193,7 @@ def main ():
 
         menubar.draw()
         draw_text(screen, FONT, str(round(clock.get_fps(), 3)) + ' FPS', (screen.get_size()[0] - (UI_SCREEN_PADDING * 8), UI_SCREEN_PADDING), False)
-        if PI_CLIENT_CONNECTED:
+        # if PI_CLIENT_CONNECTED:
             # draw_text(screen, FONT, str(PI_CLIENT.pressure) + ' atm', (screen.get_size()[0] - (UI_SCREEN_PADDING * 8), UI_SCREEN_PADDING + 30), False)
             # draw_text(screen, FONT, str(PI_CLIENT.temperature) + ' C', (screen.get_size()[0] - (UI_SCREEN_PADDING * 8), UI_SCREEN_PADDING + 60), False)
 

@@ -45,7 +45,7 @@ def main ():
             _, frame = cv2.imencode('.jpg', stream_frame, ENCODE_PARAM)
 
             # Send data
-            send_pressure_and_temperature(s, pressure, temperature)
+            # send_pressure_and_temperature(s, pressure, temperature)
             send(s, [frame])
             
         except Exception as e: # Prints Error
