@@ -77,7 +77,7 @@ class VideoStream:
             if self.t - self.t0 >= 1:
                 self.fps_list += [self.i]
                 
-                print(self.it / (self.t - self.t0), self.i, sum(self.fps_list) / len(self.fps_list))
+                # print(self.it / (self.t - self.t0), self.i, sum(self.fps_list) / len(self.fps_list))
 
                 self.t0 = self.t
                 self.i = 0
