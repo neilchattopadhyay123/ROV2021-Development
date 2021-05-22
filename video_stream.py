@@ -22,8 +22,8 @@ class VideoStream:
             pass
 
         # Setup camera settings
-        self.camera.resolution = CAMERA_RES # Set camera resolution
-        self.camera.mode = CAMERA_MODE # Set the aspect ratio of the camera
+        # self.camera.resolution = CAMERA_RES # Set camera resolution
+        # self.camera.mode = CAMERA_MODE # Set the aspect ratio of the camera
         # self.camera.framerate = CAMERA_FPS # Set camera fps
         # self.camera.shutter_speed = CAMERA_SHUTTER_SPEED # Set camera shutter speed
         # self.camera.brightness = CAMERA_BRIGHTNESS # Set camera brightness
