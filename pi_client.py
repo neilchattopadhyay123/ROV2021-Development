@@ -53,6 +53,7 @@ def main ():
 
         # Recieve data
         recv_data = recv(s)
+        print('data received')
 
         print(recv_data[1])
 

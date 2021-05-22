@@ -55,6 +55,7 @@ class ClientThread:
 
             # Send data
             send(self.connection, [self.command, [self.joystick_buttons, self.joystick_axes, self.joystick_hats]])
+            print('data sent')
 
             # Check if the client is to be disconnected
             if self.command == COMMAND_QUIT:
