@@ -2,6 +2,7 @@ import socket
 import pickle
 import struct
 import cv2
+import serial
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 from constants import *
@@ -36,20 +37,20 @@ def main ():
     PRINT('Connected to ' + ENC_VALUE(HOST + ':' + str(PORT)) + '.', SUCCESS)
 
     # Start the camera video thread
-    # stream = VideoStream().start()
+    stream = VideoStream().start()
 
     while RUNNING:
         # Get the current frame read by the video stream
-        # try:
-        #     stream_frame = stream.read()
-        #     _, frame = cv2.imencode('.jpg', stream_frame, ENCODE_PARAM)
-        #
-        #     # Send data
-        #     # send_pressure_and_temperature(s, pressure, temperature)
-        #     send(s, [frame])
-        #
-        # except Exception as e: # Prints Error
-        #     PRINT(str(e), ERROR)
+        try:
+            stream_frame = stream.read()
+            _, frame = cv2.imencode('.jpg', stream_frame, ENCODE_PARAM)
+
+            # Send data
+            # send_pressure_and_temperature(s, pressure, temperature)
+            send(s, [frame])
+
+        except Exception as e: # Prints Error
+            PRINT(str(e), ERROR)
 
         # Recieve data
         recv_data = recv(s)
@@ -64,7 +65,7 @@ def main ():
             RUNNING = False
 
     s.close() # Closes socket
-    # stream.stop() # Stops stream
+    stream.stop() # Stops stream
 
     PRINT('Quit.', SUCCESS)
 
