@@ -25,8 +25,6 @@ class ClientThread:
             self.joystick_axes = []
             self.joystick_hats = []
 
-        self.pressure = 0.001
-        self.temperature = 0.001
         self.recv_data = [] # The data recieved
         self.command = '' # The command that is going to be sent to the client
 
@@ -50,12 +48,10 @@ class ClientThread:
 
         while self.running:
             # Recieve data
-            # self.pressure, self.temperature = recv_pressure_and_temperature(self.connection)
-            # self.recv_data = recv(self.connection)
+            self.recv_data = recv(self.connection)
 
             # Send data
             send(self.connection, [self.command, [self.joystick_buttons, self.joystick_axes, self.joystick_hats]])
-            print('data sent')
 
             # Check if the client is to be disconnected
             if self.command == COMMAND_QUIT:
@@ -80,26 +76,26 @@ class ClientThread:
             for i in range(self.joystick.get_numaxes()): # Update joystick axis values
                 self.joystick_axes[i] = self.joystick.get_axis(i)
 
-            # for i in range(self.joystick.get_numhats()):  # Update joystick hat values
-            #     if self.joystick.get_hat(i)[1] > 0:
-            #         self.joystick_hats[DPAD_UP + (4 * i)] = True
-            #     else:
-            #         self.joystick_hats[DPAD_UP + (4 * i)] = False
-            #
-            #     if self.joystick.get_hat(i)[0] > 0:
-            #         self.joystick_hats[DPAD_RIGHT + (4 * i)] = True
-            #     else:
-            #         self.joystick_hats[DPAD_RIGHT + (4 * i)] = False
-            #
-            #     if self.joystick.get_hat(i)[1] < 0:
-            #         self.joystick_hats[DPAD_DOWN + (4 * i)] = True
-            #     else:
-            #         self.joystick_hats[DPAD_DOWN + (4 * i)] = False
-            #
-            #     if self.joystick.get_hat(i)[0] < 0:
-            #         self.joystick_hats[DPAD_LEFT + (4 * i)] = True
-            #     else:
-            #         self.joystick_hats[DPAD_LEFT + (4 * i)] = False
+            for i in range(self.joystick.get_numhats()):  # Update joystick hat values
+                if self.joystick.get_hat(i)[1] > 0:
+                    self.joystick_hats[DPAD_UP + (4 * i)] = True
+                else:
+                    self.joystick_hats[DPAD_UP + (4 * i)] = False
+
+                if self.joystick.get_hat(i)[0] > 0:
+                    self.joystick_hats[DPAD_RIGHT + (4 * i)] = True
+                else:
+                    self.joystick_hats[DPAD_RIGHT + (4 * i)] = False
+
+                if self.joystick.get_hat(i)[1] < 0:
+                    self.joystick_hats[DPAD_DOWN + (4 * i)] = True
+                else:
+                    self.joystick_hats[DPAD_DOWN + (4 * i)] = False
+
+                if self.joystick.get_hat(i)[0] < 0:
+                    self.joystick_hats[DPAD_LEFT + (4 * i)] = True
+                else:
+                    self.joystick_hats[DPAD_LEFT + (4 * i)] = False
 
             time.sleep(0.01) # Delay for controller data
 
