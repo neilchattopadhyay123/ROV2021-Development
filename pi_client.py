@@ -50,8 +50,6 @@ def main():
         # Recieve data
         recv_data = recv(s)
 
-        print(recv_data[1])
-
         # Check if a command was sent
         if recv_data[DATA_IDX_COMMAND] == COMMAND_QUIT:  # If quit command was recieved RUNNING = false
             PRINT('Recieved command ' + ENC_VALUE(COMMAND_QUIT) + '.', INFO)
@@ -67,7 +65,6 @@ def main():
 
             RUNNING = False
         elif time.time() - last_serial_time >= 1:
-            print(len(recv_data))
             if recv_data and len(recv_data) == 3:  # checks if recv data is empty
                 joy_vrt = round(4 * (1 - recv_data[1][3]))
                 joy_fwd = round(4 * (1 - recv_data[1][1]))
