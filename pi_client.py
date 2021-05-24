@@ -8,12 +8,15 @@ from constants import *
 from threading import Thread
 from video_stream import VideoStream
 from client_utils import *
+import serial
+import time
 
-RUNNING = True # Whether the client is running
+RUNNING = True  # Whether the client is running
 
-def main ():
+
+def main():
     ''' Main method '''
-    
+
     global RUNNING
 
     # Create a socket and connect to the server
@@ -22,8 +25,15 @@ def main ():
 
     PRINT('Connected to ' + ENC_VALUE(HOST + ':' + str(PORT)) + '.', SUCCESS)
 
+    # connect to the arduino via serial
+    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+    ser.flush()
+
+    cr = '\n'
+
     # Start the camera video thread
     stream = VideoStream().start()
+    last_serial_time = time.time()  # stores the last time a serial value was sent
 
     while RUNNING:
         # Get the current frame read by the video stream
@@ -33,25 +43,32 @@ def main ():
 
             # Send data
             send(s, [frame])
-            
-        except Exception as e: # Prints Error
+
+        except Exception as e:  # Prints Error
             PRINT(str(e), ERROR)
 
         # Recieve data
         recv_data = recv(s)
 
-        # print(recv_data[1])
+        print(recv_data[1])
 
         # Check if a command was sent
-        if recv_data[DATA_IDX_COMMAND] == COMMAND_QUIT: # If quit command was recieved RUNNING = false
+        if recv_data[DATA_IDX_COMMAND] == COMMAND_QUIT:  # If quit command was recieved RUNNING = false
             PRINT('Recieved command ' + ENC_VALUE(COMMAND_QUIT) + '.', INFO)
-            
-            RUNNING = False
 
-    s.close() # Closes socket
-    stream.stop() # Stops stream
+            RUNNING = False
+        elif time.time() - last_serial_time >= 1:
+            joy_vrt = round(4 * (1 - recv_data[3]))
+            joy_fwd = round(4 * (1 - recv_data[1]))
+            joy_rot = round(4 * (1 + recv_data[2]))
+
+            last_serial_time = time.time()
+
+    s.close()  # Closes socket
+    stream.stop()  # Stops stream
 
     PRINT('Quit.', SUCCESS)
+
 
 if __name__ == '__main__':
     main()

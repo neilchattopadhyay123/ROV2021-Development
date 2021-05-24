@@ -177,6 +177,7 @@ def main ():
                 frame = cv2.imdecode(PI_CLIENT.recv_data[DATA_IDX_VIDEO], cv2.IMREAD_COLOR)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 frame = np.rot90(frame)
+                frame = cv2.flip(frame, 1)
                 frame = pygame.surfarray.make_surface(frame)
 
                 frame = pygame.transform.scale(frame, screen.get_size())
