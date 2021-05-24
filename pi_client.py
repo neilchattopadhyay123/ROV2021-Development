@@ -56,6 +56,15 @@ def main():
         if recv_data[DATA_IDX_COMMAND] == COMMAND_QUIT:  # If quit command was recieved RUNNING = false
             PRINT('Recieved command ' + ENC_VALUE(COMMAND_QUIT) + '.', INFO)
 
+            joy_vrt = round(4 * (1 - 0))
+            joy_fwd = round(4 * (1 - 0))
+            joy_rot = round(4 * (1 + 0))
+
+            submit = str(joy_vrt * 100 + joy_fwd * 10 + joy_rot)
+
+            ser.write(submit.encode('utf-8'))
+            ser.write(cr.encode('utf-8'))
+
             RUNNING = False
         elif time.time() - last_serial_time >= 1:
             print(len(recv_data))
