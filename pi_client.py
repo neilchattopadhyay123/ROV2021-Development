@@ -71,6 +71,7 @@ def main():
                 joy_rot = round(4 * (1 + recv_data[1][2]))
 
                 submit = str(joy_vrt * 100 + joy_fwd * 10 + joy_rot)
+                print(submit)
 
                 ser.write(submit.encode('utf-8'))
                 ser.write(cr.encode('utf-8'))
