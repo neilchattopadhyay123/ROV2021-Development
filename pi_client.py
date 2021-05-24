@@ -65,7 +65,7 @@ def main():
 
             RUNNING = False
         elif time.time() - last_serial_time >= 1:
-            if recv_data and len(recv_data) == 3:  # checks if recv data is empty
+            if recv_data:  # checks if recv data is empty
                 joy_vrt = round(4 * (1 - recv_data[1][3]))
                 joy_fwd = round(4 * (1 - recv_data[1][1]))
                 joy_rot = round(4 * (1 + recv_data[1][2]))
