@@ -58,9 +58,9 @@ def main():
 
             RUNNING = False
         elif time.time() - last_serial_time >= 1:
-            joy_vrt = round(4 * (1 - recv_data[3]))
-            joy_fwd = round(4 * (1 - recv_data[1]))
-            joy_rot = round(4 * (1 + recv_data[2]))
+            joy_vrt = round(4 * (1 - recv_data[2]))
+            joy_fwd = round(4 * (1 - recv_data[0]))
+            joy_rot = round(4 * (1 + recv_data[1]))
 
             last_serial_time = time.time()
 
