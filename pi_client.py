@@ -57,11 +57,11 @@ def main():
             PRINT('Recieved command ' + ENC_VALUE(COMMAND_QUIT) + '.', INFO)
 
             RUNNING = False
-        # elif time.time() - last_serial_time >= 1:
-        #     if recv_data: # checks if recv data is empty
-        #         joy_vrt = round(4 * (1 - recv_data[1]))
-        #         joy_fwd = round(4 * (1 - recv_data[1]))
-        #         joy_rot = round(4 * (1 + recv_data[1]))
+        elif time.time() - last_serial_time >= 1:
+            if recv_data: # checks if recv data is empty
+                joy_vrt = round(4 * (1 - recv_data[1][3]))
+                joy_fwd = round(4 * (1 - recv_data[1][1]))
+                joy_rot = round(4 * (1 + recv_data[1][2]))
 
             last_serial_time = time.time()
 
